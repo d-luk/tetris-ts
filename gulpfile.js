@@ -6,11 +6,16 @@ const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const pug = require('gulp-pug');
+const browserSync = require('browser-sync').create();
 
 gulp.task('default', ['js', 'css', 'html']);
 gulp.task('watch', () => {
+    browserSync.init({
+        proxy: 'localhost:8080'
+    });
+
     gulp.watch('src/**/*.scss', ['css']);
-    gulp.watch('src/**/*.pug', ['html']);
+    gulp.watch('src/**/*.pug', ['html']).on('change', browserSync.reload);
 });
 
 gulp.task('js', cb => exec('webpack', (err, stdout, stderr) => {
@@ -26,8 +31,12 @@ gulp.task('css', () => {
         .pipe(sass().on('error', sass.logError))
         .pipe(cssMin())
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist'))
+        .pipe(sourcemaps.write('./', {
+            includeContent: false,
+            sourceRoot: '/app/scss'
+        }))
+        .pipe(browserSync.stream({ match: '**/*.css' }))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('html', () => {

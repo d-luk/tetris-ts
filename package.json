@@ -13,6 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "awesome-typescript-loader": "^3.2.2",
+    "browser-sync": "^2.18.13",
     "circular-dependency-plugin": "^3.0.0",
     "concurrently": "^3.5.0",
     "gulp": "^3.9.1",
