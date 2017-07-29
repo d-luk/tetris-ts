@@ -1,0 +1,68 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "max-line-length": [
+            true,
+            120
+        ],
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "one-variable-per-declaration": [
+            false
+        ],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore",
+            "allow-pascal-case"
+        ],
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "always",
+                "asyncArrow": "always"
+            }
+        ],
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "only-arrow-functions": [
+            true,
+            "allow-declarations",
+            "allow-named-functions"
+        ],
+        "no-namespace": false,
+        "no-console": [
+            false
+        ],
+        "no-conditional-assignment": false,
+        "trailing-comma": [
+            false
+        ],
+        "arrow-parens": [
+            true,
+            "ban-single-arg-parens"
+        ],
+        "member-ordering": [
+            false
+        ],
+        "object-literal-sort-keys": false,
+        "align": [
+            true,
+            "statements"
+        ],
+        "no-bitwise": false,
+        "max-file-line-count": [
+            true,
+            250
+        ],
+        "no-unused-expression": [
+            true,
+            "allow-fast-null-checks"
+        ]
+    }
+}
