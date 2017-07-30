@@ -14,6 +14,7 @@ gulp.task('watch', () => {
         proxy: 'localhost:8080'
     });
 
+    gulp.watch('src/**/*.ts').on('change', () => setTimeout(browserSync.reload, 1000));
     gulp.watch('src/**/*.scss', ['css']);
     gulp.watch('src/**/*.pug', ['html']).on('change', browserSync.reload);
 });

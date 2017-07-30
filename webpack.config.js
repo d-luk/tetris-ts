@@ -24,12 +24,16 @@ module.exports = {
     target: 'web',
     plugins: [
         new CheckerPlugin(),
-        new webpack.optimize.ModuleConcatenationPlugin(),
+        // TODO: Shape superclass bug
+        // new webpack.optimize.ModuleConcatenationPlugin(),
         // new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
     devtool: 'source-map',
     devServer: {
-        contentBase: "dist/"
+        contentBase: 'dist/'
     },
+    resolve: {
+        extensions: ['.ts']
+    }
 };

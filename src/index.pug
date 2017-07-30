@@ -1,9 +1,11 @@
 doctype html
 
-
-link(href='index.css', rel='stylesheet')
+head
+    link(href='index.css', rel='stylesheet')
 
 body
-    h1 Tetris
-    canvas#game
+    #content
+        h1 Tetris
+        canvas#game(width='400', height='600')
+    
     script(src='./index.js')
