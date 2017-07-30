@@ -5,8 +5,9 @@ import Shape from '../shape';
 export default class S extends Shape {
     constructor() {
         super(xyMatrix([
+            [0, 1, 1],
             [1, 1, 0],
-            [0, 1, 1]
+            [0, 0, 0]
         ]), Color.Red);
     }
 }
