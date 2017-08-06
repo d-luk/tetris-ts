@@ -24,7 +24,7 @@ const shape = getRandomShape();
 // Draw loop
 function draw(): void {
     // TODO: Only draw changes
-    shape.rotate();
+    shape.rotate(true);
     board.clear();
     board.place(shape, { x: 9, y: 10 });
 

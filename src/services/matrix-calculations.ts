@@ -42,8 +42,8 @@ export function rotateMatrix(matrix: Matrix, reverse = false): Matrix {
     for (let x = 0; x < l; x++) {
         for (let y = 0; y < l; y++) {
             result[x][y] = reverse
-                ? matrix[y][l - x - 1]
-                : matrix[l - y - 1][x];
+                ? matrix[l - y - 1][x]
+                : matrix[y][l - x - 1];
         }
     }
 
