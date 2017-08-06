@@ -15,7 +15,7 @@ export default class Shape {
         this.color = color;
     }
 
-    public rotate(reverse?: boolean): void {
+    public rotate(reverse = false): void {
         this._blocks = rotateMatrix(this._blocks, reverse);
     }
 }

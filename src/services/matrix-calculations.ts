@@ -23,25 +23,27 @@ export function addMatrix(target: Matrix, source: Matrix, position: IPoint): voi
  * Transforms matrix to be used in the coordinate system
  */
 export function xyMatrix(matrix: Matrix): Matrix {
-    const rotated = rotateMatrix(matrix);
-    return rotated.reduce<Matrix>((result, col, x) => {
-        // Flip columns
-        result[x] = col.reverse();
-        return result;
-    }, []);
+    return rotateMatrix(matrix)
+        .reduce<Matrix>((result, col, x) => {
+            // Flip columns
+            result[x] = col.reverse();
+            return result;
+        }, []);
 }
 
 /**
  * Rotate a square 2D matrix
  */
-export function rotateMatrix(matrix: Matrix, reverse?: boolean): Matrix {
-    const n = matrix.length;
-    const result: Matrix = createMatrix(n);
+export function rotateMatrix(matrix: Matrix, reverse = false): Matrix {
+    const l = matrix.length;
+    const result = createMatrix(l);
 
     // Apply rotation
-    for (let x = 0; x < n; ++x) {
-        for (let y = 0; y < n; ++y) {
-            result[x][y] = matrix[n - y - 1][x];
+    for (let x = 0; x < l; x++) {
+        for (let y = 0; y < l; y++) {
+            result[x][y] = reverse
+                ? matrix[y][l - x - 1]
+                : matrix[l - y - 1][x];
         }
     }
 
