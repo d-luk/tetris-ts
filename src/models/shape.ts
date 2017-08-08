@@ -1,6 +1,5 @@
 import Matrix from '../interfaces/matrix';
 import { rotateMatrix } from '../services/matrix-calculations';
-import { Color } from './color';
 
 export default class Shape {
     private _blocks: Matrix;
@@ -8,11 +7,8 @@ export default class Shape {
         return this._blocks;
     }
 
-    public readonly color: Color;
-
-    constructor(blocks: Matrix, color: Color) {
+    constructor(blocks: Matrix) {
         this._blocks = blocks;
-        this.color = color;
     }
 
     public rotate(reverse = false): void {
