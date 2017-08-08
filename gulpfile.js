@@ -43,5 +43,5 @@ gulp.task('css', () => {
 gulp.task('html', () => {
     return gulp.src('src/**/*.pug')
         .pipe(pug())
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('./'));
 });
