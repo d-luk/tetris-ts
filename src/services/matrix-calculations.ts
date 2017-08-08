@@ -118,3 +118,5 @@ export function matrixesColliding(m1: Matrix, m2: Matrix, position: IPoint): boo
             }
         }
     }
+    return false;
+}
