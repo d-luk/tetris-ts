@@ -24,9 +24,8 @@ module.exports = {
     target: 'web',
     plugins: [
         new CheckerPlugin(),
-        // TODO: Shape superclass bug
-        // new webpack.optimize.ModuleConcatenationPlugin(),
-        // new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
     devtool: 'source-map',
