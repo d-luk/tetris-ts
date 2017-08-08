@@ -1,4 +1,4 @@
-import IPoint from './interfaces/point';
+import { clonePoint } from './interfaces/point';
 import { ISize } from './interfaces/size';
 import Board from './models/board';
 import { getPanel } from './models/panel';
@@ -6,7 +6,7 @@ import Player from './models/player';
 import clearPanel from './services/clear-panel';
 import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
-import { matrixContains, matrixesColliding, mergeMatrixes } from './services/matrix-calculations';
+import { mergeMatrixes } from './services/matrix-calculations';
 import getRandomShape from './services/random-shape';
 
 // Define sizes
@@ -23,18 +23,21 @@ const board = new Board(boardSize);
 
 // Place a random shape
 const startingPoint = { x: 9, y: 0 };
-const player = new Player(getRandomShape(), startingPoint);
+const player = new Player(getRandomShape(), clonePoint(startingPoint));
 
 // Update loop
 function update(): void {
     // TODO: Only draw changes
-    const newPos: IPoint = { x: player.position.x, y: player.position.y + 1 };
+    const newPos = {
+        x: player.position.x,
+        y: player.position.y + 1
+    };
 
     if (board.collides(player.shape.blocks, newPos)) {
         board.place(player.shape, player.position);
 
         player.shape = getRandomShape();
-        player.position.y = 0;
+        player.position = clonePoint(startingPoint);
     } else {
         player.position = newPos;
     }
