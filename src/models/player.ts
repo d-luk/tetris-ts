@@ -1,4 +1,4 @@
-import IPoint from '../interfaces/point';
+import IPoint, { clonePoint } from '../interfaces/point';
 import { findAny, findIndex } from '../services/arrays';
 import Board from './board';
 import Shape from './shape';
@@ -14,10 +14,7 @@ export default class Player {
      * the player to be fully on the board
      */
     public getContainedPosition(board: Board): IPoint {
-        const position = {
-            x: this.position.x,
-            y: this.position.y
-        };
+        const position = clonePoint(this.position);
 
         // Find lowest x value
         const xLow = (findIndex(this.shape.blocks, col => {
@@ -32,8 +29,8 @@ export default class Player {
         }
 
         // Find highest x value
-        const xHigh = this.shape.blocks.length
-            - (findIndex(this.shape.blocks.reverse(), col => {
+        const xHigh = this.shape.blocks.length -
+            (findIndex(this.shape.blocks.reverse(), col => {
                 // Column contains a value
                 return findAny(col, value => !!value);
             }) as number) + position.x;
