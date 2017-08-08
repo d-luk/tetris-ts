@@ -34,11 +34,17 @@ export function addMatrix(target: Matrix, source: Matrix, position: IPoint): voi
 export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint): Matrix {
     const result = copyMatrix(m1);
 
-    for (let x = 0; x < m2.length; x++) {
-        for (let y = 0; y < m2[0].length; y++) {
-            const value = m2[x][y];
+    for (let i = 0; i < m2.length; i++) {
+        for (let j = 0; j < m2[0].length; j++) {
+            const value = m2[i][j];
             if (typeof value === 'undefined') continue;
-            result[x + position.x][y + position.y] = value;
+
+            const x = i + position.x;
+            const y = j + position.y;
+
+            if (x >= 0 && x < m1.length && y >= 0 && y < m1[0].length) {
+                result[x][y] = value;
+            }
         }
     }
 

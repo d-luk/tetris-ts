@@ -1,7 +1,7 @@
 import Matrix from '../interfaces/matrix';
 import IPoint from '../interfaces/point';
 import { ISize } from '../interfaces/size';
-import { addMatrix } from '../services/matrix-calculations';
+import { addMatrix, matrixContains } from '../services/matrix-calculations';
 import Shape from './shape';
 
 export default class Board {
@@ -24,5 +24,9 @@ export default class Board {
         for (let x = 0; x < this.size.width; x++) {
             this._blocks[x] = new Array(this.size.height);
         }
+    }
+
+    public contains(matrix: Matrix, position: IPoint): boolean {
+        return matrixContains(this._blocks, matrix, position);
     }
 }

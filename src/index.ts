@@ -28,7 +28,7 @@ const player = new Player(getRandomShape(), { x: 0, y: 0 });
 function update(): void {
     // TODO: Only draw changes
     const newPos: IPoint = { x: player.position.x, y: player.position.y + 1 };
-    const hitBorder = !matrixContains(board.blocks, player.shape.blocks, newPos);
+    const hitBorder = !board.contains(player.shape.blocks, newPos);
 
     if (!hitBorder) {
         player.position.y++;
@@ -37,6 +37,10 @@ function update(): void {
         player.position.y = 0;
     }
 
+    draw();
+}
+
+function draw(): void {
     const viewMatrix = mergeMatrixes(board.blocks, player.shape.blocks, player.position);
 
     clearPanel(panel);
@@ -46,3 +50,46 @@ function update(): void {
 
 update();
 window.setInterval(update, 500);
+
+// Key handling
+document.addEventListener('keydown', e => {
+
+    let newPosition = {
+        x: player.position.x,
+        y: player.position.y
+    };
+
+    let triggered = true;
+    switch (e.code) {
+        case 'ArrowUp':
+            if (e.repeat) return;
+            player.shape.rotate();
+
+            // Push shape back on to the board
+            if (!board.contains(player.shape.blocks, newPosition)) {
+                newPosition = player.getContainedPosition(board);
+            }
+
+            break;
+        case 'ArrowRight':
+            newPosition.x++;
+            break;
+        case 'ArrowDown':
+            newPosition.y++;
+            break;
+        case 'ArrowLeft':
+            newPosition.x--;
+            break;
+        default:
+            triggered = false;
+            break;
+    }
+
+    if (triggered) {
+        if (matrixContains(board.blocks, player.shape.blocks, newPosition)) {
+            player.position = newPosition;
+        }
+
+        draw();
+    }
+});
