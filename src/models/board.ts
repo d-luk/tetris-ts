@@ -1,7 +1,7 @@
 import Matrix from '../interfaces/matrix';
 import IPoint from '../interfaces/point';
 import { ISize } from '../interfaces/size';
-import { addMatrix, matrixContains } from '../services/matrix-calculations';
+import { addMatrix, matrixContains, matrixesColliding } from '../services/matrix-calculations';
 import Shape from './shape';
 
 export default class Board {
@@ -28,5 +28,10 @@ export default class Board {
 
     public contains(matrix: Matrix, position: IPoint): boolean {
         return matrixContains(this._blocks, matrix, position);
+    }
+
+    public collides(matrix: Matrix, position: IPoint): boolean {
+        return !this.contains(matrix, position)
+            || matrixesColliding(this.blocks, matrix, position);
     }
 }

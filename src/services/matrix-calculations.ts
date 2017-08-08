@@ -22,7 +22,10 @@ export function addMatrix(target: Matrix, source: Matrix, position: IPoint): voi
         for (let y = 0; y < source[0].length; y++) {
             const value = source[x][y];
             if (typeof value === 'undefined') continue;
-            target[x + position.x][y + position.y] = value;
+
+            if (value || !target[x + position.x][y + position.y]) {
+                target[x + position.x][y + position.y] = value;
+            }
         }
     }
 }
@@ -42,7 +45,9 @@ export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint): Matrix 
             const x = i + position.x;
             const y = j + position.y;
 
-            if (x >= 0 && x < m1.length && y >= 0 && y < m1[0].length) {
+            if (x >= 0 && x < m1.length &&
+                y >= 0 && y < m1[0].length &&
+                (value || !result[x][y])) {
                 result[x][y] = value;
             }
         }
@@ -103,3 +108,13 @@ export function matrixContains(parent: Matrix, child: Matrix, position: IPoint):
 
     return true;
 }
+
+export function matrixesColliding(m1: Matrix, m2: Matrix, position: IPoint): boolean {
+    for (let x = 0; x < m2.length; x++) {
+        for (let y = 0; y < m2[0].length; y++) {
+            if (!m2[x][y]) continue;
+            if (m1[x + position.x][y + position.y]) {
+                return true;
+            }
+        }
+    }
