@@ -17,25 +17,12 @@ export function copyMatrix(matrix: Matrix): Matrix {
     }, []);
 }
 
-export function addMatrix(target: Matrix, source: Matrix, position: IPoint): void {
-    for (let x = 0; x < source.length; x++) {
-        for (let y = 0; y < source[0].length; y++) {
-            const value = source[x][y];
-            if (typeof value === 'undefined') continue;
-
-            if (value || !target[x + position.x][y + position.y]) {
-                target[x + position.x][y + position.y] = value;
-            }
-        }
-    }
-}
-
 /**
  * Merges m1 and m2 into a new matrix with the size of m1
  * @param position Position of m2 on m1
  */
-export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint): Matrix {
-    const result = copyMatrix(m1);
+export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint, target?: Matrix): Matrix {
+    const result = target || copyMatrix(m1);
 
     for (let i = 0; i < m2.length; i++) {
         for (let j = 0; j < m2[0].length; j++) {
@@ -54,6 +41,10 @@ export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint): Matrix 
     }
 
     return result;
+}
+
+export function addMatrix(target: Matrix, source: Matrix, position: IPoint): void {
+    mergeMatrixes(target, source, position, target);
 }
 
 /**
