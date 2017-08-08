@@ -1,12 +1,20 @@
 import Matrix from '../interfaces/matrix';
 import IPoint from '../interfaces/point';
+import { ISize } from '../interfaces/size';
 
-export function createMatrix(size: number): Matrix {
+export function createMatrix(size: ISize): Matrix {
     const result: Matrix = [];
-    for (let col = 0; col < size; col++) {
-        result[col] = new Array(size);
+    for (let col = 0; col < size.width; col++) {
+        result[col] = new Array(size.height);
     }
     return result;
+}
+
+export function copyMatrix(matrix: Matrix): Matrix {
+    return matrix.reduce<Matrix>((result, col, x) => {
+        result[x] = col.slice();
+        return result;
+    }, []);
 }
 
 export function addMatrix(target: Matrix, source: Matrix, position: IPoint): void {
@@ -17,6 +25,24 @@ export function addMatrix(target: Matrix, source: Matrix, position: IPoint): voi
             target[x + position.x][y + position.y] = value;
         }
     }
+}
+
+/**
+ * Merges m1 and m2 into a new matrix with the size of m1
+ * @param position Position of m2 on m1
+ */
+export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint): Matrix {
+    const result = copyMatrix(m1);
+
+    for (let x = 0; x < m2.length; x++) {
+        for (let y = 0; y < m2[0].length; y++) {
+            const value = m2[x][y];
+            if (typeof value === 'undefined') continue;
+            result[x + position.x][y + position.y] = value;
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -36,7 +62,7 @@ export function xyMatrix(matrix: Matrix): Matrix {
  */
 export function rotateMatrix(matrix: Matrix, reverse = false): Matrix {
     const l = matrix.length;
-    const result = createMatrix(l);
+    const result = createMatrix({ width: l, height: l });
 
     // Apply rotation
     for (let x = 0; x < l; x++) {

@@ -6,7 +6,7 @@ import Player from './models/player';
 import clearPanel from './services/clear-panel';
 import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
-import { matrixContains } from './services/matrix-calculations';
+import { matrixContains, mergeMatrixes } from './services/matrix-calculations';
 import getRandomShape from './services/random-shape';
 
 // Define sizes
@@ -32,15 +32,17 @@ function update(): void {
 
     if (!hitBorder) {
         player.position.y++;
+    } else {
+        // TODO
+        player.position.y = 0;
     }
 
-    board.clear();
-    board.place(player.shape, player.position);
+    const viewMatrix = mergeMatrixes(board.blocks, player.shape.blocks, player.position);
 
     clearPanel(panel);
     drawGrid(panel, boardSize);
-    drawMatrix(panel, board.blocks, tileSize);
+    drawMatrix(panel, viewMatrix, tileSize);
 }
 
 update();
-window.setInterval(update, 1000);
+window.setInterval(update, 500);
