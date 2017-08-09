@@ -1,13 +1,27 @@
 import IPoint, { clonePoint } from '../interfaces/point';
 import { findAny, findIndex } from '../services/arrays';
+import getRandomShape from '../services/random-shape';
 import Board from './board';
 import Shape from './shape';
 
 export default class Player {
-    constructor(
-        public shape: Shape,
-        public position: IPoint
-    ) { }
+    private _shape: Shape;
+    public get shape() {
+        return this._shape;
+    }
+
+    public position: IPoint;
+    private _startingPos: IPoint;
+
+    constructor(startingPosition: IPoint) {
+        this._startingPos = startingPosition;
+        this.reset();
+    }
+
+    public reset(): void {
+        this.position = clonePoint(this._startingPos);
+        this._shape = getRandomShape();
+    }
 
     /**
      * Calculates a position for
@@ -17,7 +31,7 @@ export default class Player {
         const position = clonePoint(this.position);
 
         // Find lowest x value
-        const xLow = (findIndex(this.shape.blocks, col => {
+        const xLow = (findIndex(this._shape.blocks, col => {
             // Column contains a value
             return findAny(col, value => !!value);
         }) as number) + position.x;
@@ -29,8 +43,8 @@ export default class Player {
         }
 
         // Find highest x value
-        const xHigh = this.shape.blocks.length -
-            (findIndex(this.shape.blocks.reverse(), col => {
+        const xHigh = this._shape.blocks.length -
+            (findIndex(this._shape.blocks.reverse(), col => {
                 // Column contains a value
                 return findAny(col, value => !!value);
             }) as number) + position.x;

@@ -24,8 +24,8 @@ module.exports = {
     target: 'web',
     plugins: [
         new CheckerPlugin(),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
+        // new webpack.optimize.ModuleConcatenationPlugin(),
+        // new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
     devtool: 'source-map',

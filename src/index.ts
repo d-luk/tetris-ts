@@ -1,4 +1,4 @@
-import { clonePoint } from './interfaces/point';
+import { pointEquals } from './interfaces/point';
 import { ISize } from './interfaces/size';
 import Board from './models/board';
 import { getPanel } from './models/panel';
@@ -7,7 +7,6 @@ import clearPanel from './services/clear-panel';
 import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
 import { mergeMatrixes } from './services/matrix-calculations';
-import getRandomShape from './services/random-shape';
 
 // Define sizes
 const ctxSize: ISize = { width: 400, height: 600 };
@@ -22,8 +21,8 @@ const panel = getPanel('game', ctxSize);
 const board = new Board(boardSize);
 
 // Place a random shape
-const startingPoint = { x: 7, y: 0 };
-const player = new Player(getRandomShape(), clonePoint(startingPoint));
+const player = new Player({ x: 7, y: 0 });
+let firstFall = true;
 
 // Update loop
 function update(): void {
@@ -33,13 +32,26 @@ function update(): void {
         y: player.position.y + 1
     };
 
-    if (board.collides(player.shape.blocks, newPos)) {
-        board.place(player.shape, player.position);
+    const colliding = board.collides(player.shape.blocks, newPos);
 
-        player.shape = getRandomShape();
-        player.position = clonePoint(startingPoint);
+    if (firstFall) console.log('First fall');
+
+    if (firstFall && colliding) {
+        // Game over
+        board.clear();
+        player.reset();
+    } else if (!colliding) {
+        // First fall
+        // TODO: ???
+        firstFall = false;
     } else {
-        player.position = newPos;
+        if (colliding) {
+            board.place(player.shape, player.position);
+            player.reset();
+            firstFall = true;
+        } else {
+            player.position = newPos;
+        }
     }
 
     draw();
@@ -54,7 +66,7 @@ function draw(): void {
 }
 
 update();
-window.setInterval(update, 500);
+window.setInterval(update, 1500);
 
 // Key handling
 document.addEventListener('keydown', e => {
@@ -90,11 +102,15 @@ document.addEventListener('keydown', e => {
             break;
     }
 
-    if (triggered) {
+    const posChanged = !pointEquals(player.position, newPosition);
+
+    if (posChanged) {
+        firstFall = false;
+
         if (!board.collides(player.shape.blocks, newPosition)) {
             player.position = newPosition;
         }
-
-        draw();
     }
+
+    if (triggered) draw();
 });
