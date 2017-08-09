@@ -11,7 +11,7 @@ import getRandomShape from './services/random-shape';
 
 // Define sizes
 const ctxSize: ISize = { width: 400, height: 600 };
-const tileSize = 20;
+const tileSize = 25;
 const boardSize: ISize = {
     width: ctxSize.width / tileSize,
     height: ctxSize.height / tileSize
@@ -22,7 +22,7 @@ const panel = getPanel('game', ctxSize);
 const board = new Board(boardSize);
 
 // Place a random shape
-const startingPoint = { x: 9, y: 0 };
+const startingPoint = { x: 7, y: 0 };
 const player = new Player(getRandomShape(), clonePoint(startingPoint));
 
 // Update loop
