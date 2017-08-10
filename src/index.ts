@@ -34,20 +34,23 @@ function update(): void {
 
     const colliding = board.collides(player.shape.blocks, newPos);
 
-    if (firstFall) console.log('First fall');
-
     if (firstFall && colliding) {
-        // Game over
-        board.clear();
-        player.reset();
+        gameOver();
     } else if (!colliding) {
         firstFall = false;
         player.position = newPos;
     } else {
         // Colliding on non-first fall
         board.place(player.shape, player.position);
+
+        // Reset player
         player.reset();
         firstFall = true;
+
+        // Detect immediate collision
+        if (board.collides(player.shape.blocks, player.position)) {
+            gameOver();
+        }
     }
 
     draw();
@@ -70,6 +73,13 @@ function initInterval(): void {
     interval = window.setInterval(update, s * 1000);
 }
 initInterval();
+
+// Game over handling
+function gameOver(): void {
+    board.clear();
+    player.reset();
+    firstFall = true;
+}
 
 // Key handling
 document.addEventListener('keydown', e => {

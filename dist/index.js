@@ -258,11 +258,8 @@ function update() {
         y: player.position.y + 1
     };
     var colliding = board.collides(player.shape.blocks, newPos);
-    if (firstFall)
-        console.log('First fall');
     if (firstFall && colliding) {
-        board.clear();
-        player.reset();
+        gameOver();
     }
     else if (!colliding) {
         firstFall = false;
@@ -272,6 +269,9 @@ function update() {
         board.place(player.shape, player.position);
         player.reset();
         firstFall = true;
+        if (board.collides(player.shape.blocks, player.position)) {
+            gameOver();
+        }
     }
     draw();
 }
@@ -289,6 +289,11 @@ function initInterval() {
     interval = window.setInterval(update, s * 1000);
 }
 initInterval();
+function gameOver() {
+    board.clear();
+    player.reset();
+    firstFall = true;
+}
 document.addEventListener('keydown', function (e) {
     var newPosition = {
         x: player.position.x,
