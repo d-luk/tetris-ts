@@ -266,16 +266,12 @@ function update() {
     }
     else if (!colliding) {
         firstFall = false;
+        player.position = newPos;
     }
     else {
-        if (colliding) {
-            board.place(player.shape, player.position);
-            player.reset();
-            firstFall = true;
-        }
-        else {
-            player.position = newPos;
-        }
+        board.place(player.shape, player.position);
+        player.reset();
+        firstFall = true;
     }
     draw();
 }
@@ -285,8 +281,14 @@ function draw() {
     Object(__WEBPACK_IMPORTED_MODULE_5__services_draw_grid__["a" /* default */])(panel, boardSize);
     Object(__WEBPACK_IMPORTED_MODULE_6__services_draw_matrix__["a" /* default */])(panel, viewMatrix, tileSize);
 }
-update();
-window.setInterval(update, 1500);
+var interval;
+var s = 1.5;
+function initInterval() {
+    window.clearInterval(interval);
+    update();
+    interval = window.setInterval(update, s * 1000);
+}
+initInterval();
 document.addEventListener('keydown', function (e) {
     var newPosition = {
         x: player.position.x,
@@ -317,10 +319,12 @@ document.addEventListener('keydown', function (e) {
     }
     var posChanged = !Object(__WEBPACK_IMPORTED_MODULE_0__interfaces_point__["b" /* pointEquals */])(player.position, newPosition);
     if (posChanged) {
-        firstFall = false;
         if (!board.collides(player.shape.blocks, newPosition)) {
             player.position = newPosition;
+            firstFall = false;
         }
+        else
+            initInterval();
     }
     if (triggered)
         draw();

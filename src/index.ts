@@ -41,17 +41,13 @@ function update(): void {
         board.clear();
         player.reset();
     } else if (!colliding) {
-        // First fall
-        // TODO: ???
         firstFall = false;
+        player.position = newPos;
     } else {
-        if (colliding) {
-            board.place(player.shape, player.position);
-            player.reset();
-            firstFall = true;
-        } else {
-            player.position = newPos;
-        }
+        // Colliding on non-first fall
+        board.place(player.shape, player.position);
+        player.reset();
+        firstFall = true;
     }
 
     draw();
@@ -65,8 +61,15 @@ function draw(): void {
     drawMatrix(panel, viewMatrix, tileSize);
 }
 
-update();
-window.setInterval(update, 1500);
+// Call update and keep calling it every s seconds
+let interval: number;
+const s = 1.5;
+function initInterval(): void {
+    window.clearInterval(interval);
+    update();
+    interval = window.setInterval(update, s * 1000);
+}
+initInterval();
 
 // Key handling
 document.addEventListener('keydown', e => {
@@ -105,11 +108,10 @@ document.addEventListener('keydown', e => {
     const posChanged = !pointEquals(player.position, newPosition);
 
     if (posChanged) {
-        firstFall = false;
-
         if (!board.collides(player.shape.blocks, newPosition)) {
             player.position = newPosition;
-        }
+            firstFall = false;
+        } else initInterval();
     }
 
     if (triggered) draw();
