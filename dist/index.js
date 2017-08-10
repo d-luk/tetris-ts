@@ -354,7 +354,34 @@ var Board = (function () {
         configurable: true
     });
     Board.prototype.place = function (shape, position) {
+        var _this = this;
         Object(__WEBPACK_IMPORTED_MODULE_0__services_matrix_calculations__["a" /* addMatrix */])(this.blocks, shape.blocks, position);
+        this.getFullRows()
+            .forEach(function (row) { return _this.deleteRow(row); });
+    };
+    Board.prototype.getFullRows = function () {
+        var rowCount = this._blocks[0].length;
+        var incompleteRows = new Array(rowCount - 1);
+        rows: for (var y = 0; y < rowCount; y++) {
+            for (var x = 0; x < this._blocks.length; x++) {
+                if (!this._blocks[x][y]) {
+                    incompleteRows[y] = true;
+                    continue rows;
+                }
+            }
+        }
+        var result = [];
+        for (var row = 0; row < rowCount; row++) {
+            if (!incompleteRows[row])
+                result.push(row);
+        }
+        return result;
+    };
+    Board.prototype.deleteRow = function (row) {
+        this._blocks.forEach(function (col) {
+            col.splice(row, 1);
+            col.unshift(undefined);
+        });
     };
     Board.prototype.clear = function () {
         this._blocks = [];

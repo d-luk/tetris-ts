@@ -15,8 +15,40 @@ export default class Board {
         this.clear();
     }
 
-    public place(shape: Shape, position: IPoint) {
+    public place(shape: Shape, position: IPoint): void {
         addMatrix(this.blocks, shape.blocks, position);
+
+        this.getFullRows()
+            .forEach(row => this.deleteRow(row));
+    }
+
+    private getFullRows(): number[] {
+        const rowCount = this._blocks[0].length;
+        const incompleteRows = new Array<boolean>(rowCount - 1);
+
+        rows:
+        for (let y = 0; y < rowCount; y++) {
+            // tslint:disable-next-line:prefer-for-of
+            for (let x = 0; x < this._blocks.length; x++) {
+                if (!this._blocks[x][y]) {
+                    incompleteRows[y] = true;
+                    continue rows;
+                }
+            }
+        }
+
+        const result: number[] = [];
+        for (let row = 0; row < rowCount; row++) {
+            if (!incompleteRows[row]) result.push(row);
+        }
+        return result;
+    }
+
+    private deleteRow(row: number): void {
+        this._blocks.forEach(col => {
+            col.splice(row, 1);
+            col.unshift(undefined);
+        });
     }
 
     public clear(): void {
