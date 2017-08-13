@@ -8,12 +8,32 @@ import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
 import { mergeMatrixes } from './services/matrix-calculations';
 
-// Define sizes
-const ctxSize: ISize = { width: 400, height: 600 };
-const tileSize = 25;
+// Read context size
+const el = document.getElementById('game') as HTMLCanvasElement;
+
+const ctxSize: ISize = {
+    width: el.offsetWidth,
+    height: el.offsetHeight
+};
+
+// Fix scaling for small viewports
+const attributeSize: ISize = {
+    width: parseInt(el.getAttribute('width') as string, 10),
+    height: parseInt(el.getAttribute('height') as string, 10)
+};
+
+if (attributeSize.width !== ctxSize.width) {
+    el.setAttribute('width', `${ctxSize.width}`);
+}
+
+if (attributeSize.height !== ctxSize.height) {
+    el.setAttribute('height', `${ctxSize.height}`);
+}
+
+// Declare tile count on board
 const boardSize: ISize = {
-    width: ctxSize.width / tileSize,
-    height: ctxSize.height / tileSize
+    width: 16,
+    height: 24
 };
 
 // Create panel
@@ -26,7 +46,6 @@ let firstFall = true;
 
 // Update loop
 function update(): void {
-    // TODO: Only draw changes
     const newPos = {
         x: player.position.x,
         y: player.position.y + 1
@@ -61,7 +80,7 @@ function draw(): void {
 
     clearPanel(panel);
     drawGrid(panel, boardSize);
-    drawMatrix(panel, viewMatrix, tileSize);
+    drawMatrix(panel, viewMatrix);
 }
 
 // Call update and keep calling it every s seconds

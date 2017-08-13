@@ -1,17 +1,24 @@
 import Matrix from '../interfaces/matrix';
+import { ISize } from '../interfaces/size';
 import { Color } from '../models/color';
 import IPanel from '../models/panel';
 import settings from '../settings';
 
-export default function drawMatrix(panel: IPanel, matrix: Matrix, tileSize: number): void {
+export default function drawMatrix(panel: IPanel, matrix: Matrix): void {
     const ctx = panel.ctx;
+
+    const tileSize: ISize = {
+        width: panel.size.width / matrix.length,
+        height: panel.size.height / matrix[0].length
+    };
 
     matrix.forEach((col, x) => col.forEach((item, y) => {
         if (typeof item === 'undefined' ||
             !settings.drawEmptyTiles && !item) return;
 
         ctx.fillStyle = item ? getColorCode(item) : '#8ED6FF';
-        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        ctx.fillRect(x * tileSize.width, y * tileSize.height,
+            tileSize.width, tileSize.height);
     }));
 }
 

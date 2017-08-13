@@ -242,11 +242,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var ctxSize = { width: 400, height: 600 };
-var tileSize = 25;
+var el = document.getElementById('game');
+var ctxSize = {
+    width: el.offsetWidth,
+    height: el.offsetHeight
+};
+var attributeSize = {
+    width: parseInt(el.getAttribute('width'), 10),
+    height: parseInt(el.getAttribute('height'), 10)
+};
+if (attributeSize.width !== ctxSize.width) {
+    el.setAttribute('width', "" + ctxSize.width);
+}
+if (attributeSize.height !== ctxSize.height) {
+    el.setAttribute('height', "" + ctxSize.height);
+}
 var boardSize = {
-    width: ctxSize.width / tileSize,
-    height: ctxSize.height / tileSize
+    width: 16,
+    height: 24
 };
 var panel = Object(__WEBPACK_IMPORTED_MODULE_2__models_panel__["a" /* getPanel */])('game', ctxSize);
 var board = new __WEBPACK_IMPORTED_MODULE_1__models_board__["a" /* default */](boardSize);
@@ -279,7 +292,7 @@ function draw() {
     var viewMatrix = Object(__WEBPACK_IMPORTED_MODULE_7__services_matrix_calculations__["d" /* mergeMatrixes */])(board.blocks, player.shape.blocks, player.position);
     Object(__WEBPACK_IMPORTED_MODULE_4__services_clear_panel__["a" /* default */])(panel);
     Object(__WEBPACK_IMPORTED_MODULE_5__services_draw_grid__["a" /* default */])(panel, boardSize);
-    Object(__WEBPACK_IMPORTED_MODULE_6__services_draw_matrix__["a" /* default */])(panel, viewMatrix, tileSize);
+    Object(__WEBPACK_IMPORTED_MODULE_6__services_draw_matrix__["a" /* default */])(panel, viewMatrix);
 }
 var interval;
 var s = 0.5;
@@ -824,14 +837,18 @@ function drawGrid(panel, gridSize) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings__ = __webpack_require__(20);
 
 
-function drawMatrix(panel, matrix, tileSize) {
+function drawMatrix(panel, matrix) {
     var ctx = panel.ctx;
+    var tileSize = {
+        width: panel.size.width / matrix.length,
+        height: panel.size.height / matrix[0].length
+    };
     matrix.forEach(function (col, x) { return col.forEach(function (item, y) {
         if (typeof item === 'undefined' ||
             !__WEBPACK_IMPORTED_MODULE_1__settings__["a" /* default */].drawEmptyTiles && !item)
             return;
         ctx.fillStyle = item ? getColorCode(item) : '#8ED6FF';
-        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        ctx.fillRect(x * tileSize.width, y * tileSize.height, tileSize.width, tileSize.height);
     }); });
 }
 function getColorCode(color) {
