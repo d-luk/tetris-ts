@@ -12,6 +12,7 @@
   "author": "Duncan Luk",
   "license": "MIT",
   "devDependencies": {
+    "@types/modernizr": "^3.5.0",
     "awesome-typescript-loader": "^3.2.2",
     "browser-sync": "^2.18.13",
     "circular-dependency-plugin": "^3.0.0",

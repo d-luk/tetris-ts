@@ -234,6 +234,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_draw_grid__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_draw_matrix__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_matrix_calculations__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_modernizr_min_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__vendor_modernizr_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__vendor_modernizr_min_js__);
+
 
 
 
@@ -874,6 +877,12 @@ var settings = {
 };
 /* harmony default export */ __webpack_exports__["a"] = (settings);
 
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'D:\\Projecten\\Tetris\\src\\vendor\\modernizr.min.js'");
 
 /***/ })
 /******/ ]);

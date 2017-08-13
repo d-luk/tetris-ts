@@ -7,6 +7,7 @@ import clearPanel from './services/clear-panel';
 import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
 import { mergeMatrixes } from './services/matrix-calculations';
+import './vendor/modernizr.min.js';
 
 // Read context size
 const el = document.getElementById('game') as HTMLCanvasElement;
