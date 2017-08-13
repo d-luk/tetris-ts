@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -210,6 +210,35 @@ var Shape = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = addScore;
+/* harmony export (immutable) */ __webpack_exports__["c"] = resetScore;
+/* harmony export (immutable) */ __webpack_exports__["b"] = onScoreChange;
+var currentScore = 0;
+function addScore(points) {
+    currentScore += points;
+    triggerScoreChange();
+}
+function resetScore() {
+    currentScore = 0;
+    triggerScoreChange();
+}
+var subscribers = [];
+function onScoreChange(handler, triggerOnInit) {
+    if (triggerOnInit === void 0) { triggerOnInit = false; }
+    subscribers.push(handler);
+    if (triggerOnInit)
+        handler(currentScore);
+}
+function triggerScoreChange() {
+    subscribers.forEach(function (handler) { return handler(currentScore); });
+}
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = clonePoint;
 /* harmony export (immutable) */ __webpack_exports__["b"] = pointEquals;
 function clonePoint(point) {
@@ -221,22 +250,45 @@ function pointEquals(a, b) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var settings = {
+    drawEmptyTiles: false,
+    points: {
+        linesCleared: {
+            1: 40,
+            2: 100,
+            3: 300,
+            4: 1200
+        },
+        softDrop: 1,
+        hardDrop: 2,
+        softDropMax: 20,
+        hardDropMax: 40
+    }
+};
+/* harmony default export */ __webpack_exports__["a"] = (settings);
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_player_score__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_point__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_board__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_panel__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_player__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_clear_panel__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_draw_grid__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_draw_matrix__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_player_score__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_point__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_board__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_panel__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_player__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_clear_panel__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_draw_grid__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_draw_matrix__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_matrix_calculations__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_player_score__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__settings__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_player_score__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__settings__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__vendor_modernizr_min_js__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__vendor_modernizr_min_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__vendor_modernizr_min_js__);
 
@@ -256,14 +308,15 @@ var ctxSize = {
     width: el.offsetWidth,
     height: el.offsetHeight
 };
-var attributeSize = {
-    width: parseInt(el.getAttribute('width'), 10),
-    height: parseInt(el.getAttribute('height'), 10)
+var scale = devicePixelRatio || 1;
+var viewSize = {
+    width: parseInt(el.getAttribute('width'), 10) * scale,
+    height: parseInt(el.getAttribute('height'), 10) * scale
 };
-if (attributeSize.width !== ctxSize.width) {
+if (viewSize.width !== ctxSize.width) {
     el.setAttribute('width', "" + ctxSize.width);
 }
-if (attributeSize.height !== ctxSize.height) {
+if (viewSize.height !== ctxSize.height) {
     el.setAttribute('height', "" + ctxSize.height);
 }
 var boardSize = {
@@ -376,12 +429,12 @@ Object(__WEBPACK_IMPORTED_MODULE_0__components_player_score__["a" /* default */]
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = loadPlayerScore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_player_score__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_player_score__ = __webpack_require__(3);
 
 var scoreEl;
 function loadPlayerScore() {
@@ -393,7 +446,7 @@ function loadPlayerScore() {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -461,7 +514,7 @@ var Board = (function () {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -478,13 +531,13 @@ function getPanel(canvasID, size) {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_point__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_arrays__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_random_shape__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_point__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_arrays__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_random_shape__ = __webpack_require__(12);
 
 
 
@@ -529,7 +582,7 @@ var Player = (function () {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -549,18 +602,18 @@ function findAny(array, predicate) {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getRandomShape;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_shapes_i__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_shapes_j__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_shapes_l__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_shapes_o__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_shapes_s__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_shapes_t__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_shapes_z__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_shapes_i__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_shapes_j__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_shapes_l__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_shapes_o__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_shapes_s__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_shapes_t__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_shapes_z__ = __webpack_require__(19);
 
 
 
@@ -576,7 +629,7 @@ function getRandomShape() {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -613,7 +666,7 @@ var I = (function (_super) {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -649,7 +702,7 @@ var J = (function (_super) {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -685,7 +738,7 @@ var L = (function (_super) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -720,7 +773,7 @@ var O = (function (_super) {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -756,7 +809,7 @@ var S = (function (_super) {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -792,7 +845,7 @@ var T = (function (_super) {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -828,7 +881,7 @@ var Z = (function (_super) {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -839,7 +892,7 @@ function clearPanel(panel) {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -867,13 +920,13 @@ function drawGrid(panel, gridSize) {
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = drawMatrix;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_color__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__settings__ = __webpack_require__(5);
 
 
 function drawMatrix(panel, matrix) {
@@ -909,58 +962,6 @@ function getColorCode(color) {
         default:
             return '#000';
     }
-}
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var settings = {
-    drawEmptyTiles: false,
-    points: {
-        linesCleared: {
-            1: 40,
-            2: 100,
-            3: 300,
-            4: 1200
-        },
-        softDrop: 1,
-        hardDrop: 2,
-        softDropMax: 20,
-        hardDropMax: 40
-    }
-};
-/* harmony default export */ __webpack_exports__["a"] = (settings);
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = addScore;
-/* harmony export (immutable) */ __webpack_exports__["c"] = resetScore;
-/* harmony export (immutable) */ __webpack_exports__["b"] = onScoreChange;
-var currentScore = 0;
-function addScore(points) {
-    currentScore += points;
-    triggerScoreChange();
-}
-function resetScore() {
-    currentScore = 0;
-    triggerScoreChange();
-}
-var subscribers = [];
-function onScoreChange(handler, triggerOnInit) {
-    if (triggerOnInit === void 0) { triggerOnInit = false; }
-    subscribers.push(handler);
-    if (triggerOnInit)
-        handler(currentScore);
-}
-function triggerScoreChange() {
-    subscribers.forEach(function (handler) { return handler(currentScore); });
 }
 
 

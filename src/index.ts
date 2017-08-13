@@ -21,16 +21,18 @@ const ctxSize: ISize = {
 };
 
 // Fix scaling for small viewports
-const attributeSize: ISize = {
-    width: parseInt(el.getAttribute('width') as string, 10),
-    height: parseInt(el.getAttribute('height') as string, 10)
+const scale = devicePixelRatio || 1;
+
+const viewSize: ISize = {
+    width: parseInt(el.getAttribute('width') as string, 10) * scale,
+    height: parseInt(el.getAttribute('height') as string, 10) * scale
 };
 
-if (attributeSize.width !== ctxSize.width) {
+if (viewSize.width !== ctxSize.width) {
     el.setAttribute('width', `${ctxSize.width}`);
 }
 
-if (attributeSize.height !== ctxSize.height) {
+if (viewSize.height !== ctxSize.height) {
     el.setAttribute('height', `${ctxSize.height}`);
 }
 
