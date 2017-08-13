@@ -282,7 +282,7 @@ function draw() {
     Object(__WEBPACK_IMPORTED_MODULE_6__services_draw_matrix__["a" /* default */])(panel, viewMatrix, tileSize);
 }
 var interval;
-var s = 1.5;
+var s = 0.5;
 function initInterval() {
     window.clearInterval(interval);
     update();
@@ -317,6 +317,13 @@ document.addEventListener('keydown', function (e) {
             break;
         case 'ArrowLeft':
             newPosition.x--;
+            break;
+        case 'Space':
+            var nextPos = newPosition;
+            do {
+                nextPos = { x: nextPos.x, y: nextPos.y + 1 };
+            } while (board.contains(player.shape.blocks, nextPos));
+            newPosition = { x: nextPos.x, y: nextPos.y - 1 };
             break;
         default:
             triggered = false;

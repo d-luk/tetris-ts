@@ -66,7 +66,7 @@ function draw(): void {
 
 // Call update and keep calling it every s seconds
 let interval: number;
-const s = 1.5;
+const s = 0.5;
 function initInterval(): void {
     window.clearInterval(interval);
     update();
@@ -92,6 +92,7 @@ document.addEventListener('keydown', e => {
     let triggered = true;
     switch (e.code) {
         case 'ArrowUp':
+            // Rotate clockwise
             if (e.repeat) return;
             player.shape.rotate();
 
@@ -102,13 +103,25 @@ document.addEventListener('keydown', e => {
 
             break;
         case 'ArrowRight':
+            // Move right
             newPosition.x++;
             break;
         case 'ArrowDown':
+            // Soft drop
             newPosition.y++;
             break;
         case 'ArrowLeft':
+            // Move left
             newPosition.x--;
+            break;
+        case 'Space':
+            // Hard drop
+            let nextPos = newPosition;
+            do {
+                nextPos = { x: nextPos.x, y: nextPos.y + 1 };
+            } while (board.contains(player.shape.blocks, nextPos));
+
+            newPosition = { x: nextPos.x, y: nextPos.y - 1 };
             break;
         default:
             triggered = false;
