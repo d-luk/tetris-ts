@@ -304,26 +304,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 var el = document.getElementById('game');
+var pixelRatio = devicePixelRatio || 1;
 var ctxSize = {
-    width: el.offsetWidth,
-    height: el.offsetHeight
+    width: parseInt(el.getAttribute('width'), 10) * pixelRatio,
+    height: parseInt(el.getAttribute('height'), 10) * pixelRatio
 };
-var scale = devicePixelRatio || 1;
-var viewSize = {
-    width: parseInt(el.getAttribute('width'), 10) * scale,
-    height: parseInt(el.getAttribute('height'), 10) * scale
-};
-if (viewSize.width !== ctxSize.width) {
+if (ctxSize.width !== el.offsetWidth) {
     el.setAttribute('width', "" + ctxSize.width);
 }
-if (viewSize.height !== ctxSize.height) {
+if (ctxSize.height !== el.offsetHeight) {
     el.setAttribute('height', "" + ctxSize.height);
 }
 var boardSize = {
     width: 16,
     height: 24
 };
-var panel = Object(__WEBPACK_IMPORTED_MODULE_3__models_panel__["a" /* getPanel */])('game', ctxSize);
+var panel = Object(__WEBPACK_IMPORTED_MODULE_3__models_panel__["a" /* getPanel */])('game', ctxSize, pixelRatio);
 var board = new __WEBPACK_IMPORTED_MODULE_2__models_board__["a" /* default */](boardSize);
 var player = new __WEBPACK_IMPORTED_MODULE_4__models_player__["a" /* default */]({ x: 7, y: 0 });
 var softDropPoints = 0;
@@ -519,14 +515,14 @@ var Board = (function () {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getPanel;
-function getPanel(canvasID, size) {
+function getPanel(canvasID, size, pixelRatio) {
     var canvas = document.getElementById(canvasID);
     if (!canvas)
         throw new Error('Canvas not found!');
     var ctx = canvas.getContext('2d');
     if (!ctx)
         throw new Error('Context not found!');
-    return { ctx: ctx, size: size };
+    return { ctx: ctx, size: size, pixelRatio: pixelRatio };
 }
 
 
@@ -904,6 +900,7 @@ function drawGrid(panel, gridSize) {
     };
     var ctx = panel.ctx;
     ctx.strokeStyle = '#efefef';
+    ctx.lineWidth = panel.pixelRatio;
     for (var x = 0; x < panel.size.width; x += tileSize.width) {
         ctx.beginPath();
         ctx.moveTo(x, 0);

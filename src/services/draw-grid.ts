@@ -9,6 +9,7 @@ export default function drawGrid(panel: IPanel, gridSize: ISize): void {
 
     const { ctx } = panel;
     ctx.strokeStyle = '#efefef';
+    ctx.lineWidth = panel.pixelRatio;
 
     for (let x = 0; x < panel.size.width; x += tileSize.width) {
         ctx.beginPath();

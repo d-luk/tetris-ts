@@ -14,25 +14,19 @@ import './vendor/modernizr.min.js';
 
 // Read context size
 const el = document.getElementById('game') as HTMLCanvasElement;
+const pixelRatio = devicePixelRatio || 1;
 
 const ctxSize: ISize = {
-    width: el.offsetWidth,
-    height: el.offsetHeight
+    width: parseInt(el.getAttribute('width') as string, 10) * pixelRatio,
+    height: parseInt(el.getAttribute('height') as string, 10) * pixelRatio
 };
 
 // Fix scaling for small viewports
-const scale = devicePixelRatio || 1;
-
-const viewSize: ISize = {
-    width: parseInt(el.getAttribute('width') as string, 10) * scale,
-    height: parseInt(el.getAttribute('height') as string, 10) * scale
-};
-
-if (viewSize.width !== ctxSize.width) {
+if (ctxSize.width !== el.offsetWidth) {
     el.setAttribute('width', `${ctxSize.width}`);
 }
 
-if (viewSize.height !== ctxSize.height) {
+if (ctxSize.height !== el.offsetHeight) {
     el.setAttribute('height', `${ctxSize.height}`);
 }
 
@@ -43,7 +37,7 @@ const boardSize: ISize = {
 };
 
 // Create panel
-const panel = getPanel('game', ctxSize);
+const panel = getPanel('game', ctxSize, pixelRatio);
 const board = new Board(boardSize);
 
 // Place a random shape
