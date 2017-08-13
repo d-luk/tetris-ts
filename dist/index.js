@@ -335,7 +335,7 @@ document.addEventListener('keydown', function (e) {
             var nextPos = newPosition;
             do {
                 nextPos = { x: nextPos.x, y: nextPos.y + 1 };
-            } while (board.contains(player.shape.blocks, nextPos));
+            } while (!board.collides(player.shape.blocks, nextPos));
             newPosition = { x: nextPos.x, y: nextPos.y - 1 };
             break;
         default:
