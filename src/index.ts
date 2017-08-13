@@ -42,7 +42,6 @@ const board = new Board(boardSize);
 
 // Place a random shape
 const player = new Player({ x: 7, y: 0 });
-let firstFall = true;
 
 // Update loop
 function update(): void {
@@ -51,12 +50,7 @@ function update(): void {
         y: player.position.y + 1
     };
 
-    const colliding = board.collides(player.shape.blocks, newPos);
-
-    if (firstFall && colliding) {
-        gameOver();
-    } else if (!colliding) {
-        firstFall = false;
+    if (!board.collides(player.shape.blocks, newPos)) {
         player.position = newPos;
     } else {
         // Colliding on non-first fall
@@ -64,7 +58,6 @@ function update(): void {
 
         // Reset player
         player.reset();
-        firstFall = true;
 
         // Detect immediate collision
         if (board.collides(player.shape.blocks, player.position)) {
@@ -97,7 +90,6 @@ initInterval();
 function gameOver(): void {
     board.clear();
     player.reset();
-    firstFall = true;
 }
 
 // Key handling
@@ -152,7 +144,6 @@ document.addEventListener('keydown', e => {
     if (posChanged) {
         if (!board.collides(player.shape.blocks, newPosition)) {
             player.position = newPosition;
-            firstFall = false;
         } else initInterval();
     }
 

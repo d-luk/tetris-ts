@@ -264,24 +264,17 @@ var boardSize = {
 var panel = Object(__WEBPACK_IMPORTED_MODULE_2__models_panel__["a" /* getPanel */])('game', ctxSize);
 var board = new __WEBPACK_IMPORTED_MODULE_1__models_board__["a" /* default */](boardSize);
 var player = new __WEBPACK_IMPORTED_MODULE_3__models_player__["a" /* default */]({ x: 7, y: 0 });
-var firstFall = true;
 function update() {
     var newPos = {
         x: player.position.x,
         y: player.position.y + 1
     };
-    var colliding = board.collides(player.shape.blocks, newPos);
-    if (firstFall && colliding) {
-        gameOver();
-    }
-    else if (!colliding) {
-        firstFall = false;
+    if (!board.collides(player.shape.blocks, newPos)) {
         player.position = newPos;
     }
     else {
         board.place(player.shape, player.position);
         player.reset();
-        firstFall = true;
         if (board.collides(player.shape.blocks, player.position)) {
             gameOver();
         }
@@ -305,7 +298,6 @@ initInterval();
 function gameOver() {
     board.clear();
     player.reset();
-    firstFall = true;
 }
 document.addEventListener('keydown', function (e) {
     var newPosition = {
@@ -346,7 +338,6 @@ document.addEventListener('keydown', function (e) {
     if (posChanged) {
         if (!board.collides(player.shape.blocks, newPosition)) {
             player.position = newPosition;
-            firstFall = false;
         }
         else
             initInterval();
