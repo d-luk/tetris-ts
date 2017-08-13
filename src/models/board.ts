@@ -17,12 +17,15 @@ export default class Board {
 
     public place(shape: Shape, position: IPoint): void {
         addMatrix(this.blocks, shape.blocks, position);
-
-        this.getFullRows()
-            .forEach(row => this.deleteRow(row));
     }
 
-    private getFullRows(): number[] {
+    public clearFullLines(): number {
+        const fullRows = this.getFullLines();
+        fullRows.forEach(row => this.deleteRow(row));
+        return fullRows.length;
+    }
+
+    private getFullLines(): number[] {
         const rowCount = this._blocks[0].length;
         const incompleteRows = new Array<boolean>(rowCount - 1);
 

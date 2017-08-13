@@ -1,3 +1,4 @@
+import loadPlayerScore from './components/player-score';
 import { pointEquals } from './interfaces/point';
 import { ISize } from './interfaces/size';
 import Board from './models/board';
@@ -7,6 +8,8 @@ import clearPanel from './services/clear-panel';
 import drawGrid from './services/draw-grid';
 import drawMatrix from './services/draw-matrix';
 import { mergeMatrixes } from './services/matrix-calculations';
+import { addScore, resetScore } from './services/player-score';
+import settings from './settings';
 import './vendor/modernizr.min.js';
 
 // Read context size
@@ -43,6 +46,7 @@ const board = new Board(boardSize);
 
 // Place a random shape
 const player = new Player({ x: 7, y: 0 });
+let softDropPoints = 0;
 
 // Update loop
 function update(): void {
@@ -54,11 +58,19 @@ function update(): void {
     if (!board.collides(player.shape.blocks, newPos)) {
         player.position = newPos;
     } else {
-        // Colliding on non-first fall
+        // Colliding
         board.place(player.shape, player.position);
+        const linesCleared = board.clearFullLines();
+
+        // Add points for cleared lines
+        if (linesCleared) {
+            const scoring = settings.points.linesCleared as { [lines: number]: number };
+            addScore(scoring[linesCleared]);
+        }
 
         // Reset player
         player.reset();
+        softDropPoints = 0;
 
         // Detect immediate collision
         if (board.collides(player.shape.blocks, player.position)) {
@@ -77,7 +89,7 @@ function draw(): void {
     drawMatrix(panel, viewMatrix);
 }
 
-// Call update and keep calling it every s seconds
+// Call update every s seconds
 let interval: number;
 const s = 0.5;
 function initInterval(): void {
@@ -91,6 +103,7 @@ initInterval();
 function gameOver(): void {
     board.clear();
     player.reset();
+    resetScore();
 }
 
 // Key handling
@@ -121,6 +134,14 @@ document.addEventListener('keydown', e => {
         case 'ArrowDown':
             // Soft drop
             newPosition.y++;
+
+            // Add points to score
+            const sdPoints = settings.points.softDrop;
+            softDropPoints += sdPoints;
+            if (softDropPoints < settings.points.softDropMax) {
+                addScore(sdPoints);
+            }
+
             break;
         case 'ArrowLeft':
             // Move left
@@ -129,11 +150,18 @@ document.addEventListener('keydown', e => {
         case 'Space':
             // Hard drop
             let nextPos = newPosition;
+            let hdPoints = 0;
+
             do {
                 nextPos = { x: nextPos.x, y: nextPos.y + 1 };
+                hdPoints += settings.points.hardDrop;
             } while (!board.collides(player.shape.blocks, nextPos));
 
             newPosition = { x: nextPos.x, y: nextPos.y - 1 };
+            addScore(Math.min(
+                hdPoints - settings.points.hardDrop,
+                settings.points.hardDropMax));
+
             break;
         default:
             triggered = false;
@@ -148,5 +176,11 @@ document.addEventListener('keydown', e => {
         } else initInterval();
     }
 
-    if (triggered) draw();
+    if (triggered) {
+        e.preventDefault();
+        draw();
+    }
 });
+
+// Load components
+loadPlayerScore();
