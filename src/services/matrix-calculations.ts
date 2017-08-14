@@ -17,6 +17,13 @@ export function copyMatrix(matrix: Matrix): Matrix {
     }, []);
 }
 
+export function getMatrixSize(matrix: Matrix): ISize {
+    return {
+        width: matrix.length,
+        height: matrix[0].length
+    };
+}
+
 /**
  * Merges m1 and m2 into a new matrix with the size of m1
  * @param position Position of m2 on m1

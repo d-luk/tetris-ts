@@ -1,7 +1,7 @@
+import Panel from '../components/panel';
 import { ISize } from '../interfaces/size';
-import IPanel from '../models/panel';
 
-export default function drawGrid(panel: IPanel, gridSize: ISize): void {
+export default function drawGrid(panel: Panel, gridSize: ISize): void {
     const tileSize: ISize = {
         width: panel.size.width / gridSize.width,
         height: panel.size.height / gridSize.height

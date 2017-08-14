@@ -1,10 +1,10 @@
+import Panel from '../components/panel';
 import Matrix from '../interfaces/matrix';
 import { ISize } from '../interfaces/size';
 import { Color } from '../models/color';
-import IPanel from '../models/panel';
 import settings from '../settings';
 
-export default function drawMatrix(panel: IPanel, matrix: Matrix): void {
+export default function drawMatrix(panel: Panel, matrix: Matrix): void {
     const ctx = panel.ctx;
 
     const tileSize: ISize = {

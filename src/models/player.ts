@@ -13,6 +13,8 @@ export default class Player {
     public position: IPoint;
     private _startingPos: IPoint;
 
+    public softDropPoints = 0;
+
     constructor(startingPosition: IPoint) {
         this._startingPos = startingPosition;
         this.reset();
