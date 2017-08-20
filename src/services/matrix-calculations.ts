@@ -1,5 +1,5 @@
 import Matrix from '../interfaces/matrix';
-import IPoint from '../interfaces/point';
+import IPositionedMatrix from '../interfaces/positioned-matrix';
 import { ISize } from '../interfaces/size';
 
 export function createMatrix(size: ISize): Matrix {
@@ -25,11 +25,11 @@ export function getMatrixSize(matrix: Matrix): ISize {
 }
 
 /**
- * Merges m1 and m2 into a new matrix with the size of m1
- * @param position Position of m2 on m1
+ * Merges m1 and pm2 into a new matrix with the size of m1
  */
-export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint, target?: Matrix): Matrix {
-    const result = target || copyMatrix(m1);
+export function mergeMatrixes(m1: Matrix, pm2: IPositionedMatrix, target = copyMatrix(m1)): Matrix {
+    const { matrix: m2, position } = pm2;
+    const result = target;
 
     for (let i = 0; i < m2.length; i++) {
         for (let j = 0; j < m2[0].length; j++) {
@@ -48,10 +48,6 @@ export function mergeMatrixes(m1: Matrix, m2: Matrix, position: IPoint, target?:
     }
 
     return result;
-}
-
-export function addMatrix(target: Matrix, source: Matrix, position: IPoint): void {
-    mergeMatrixes(target, source, position, target);
 }
 
 /**
@@ -88,9 +84,11 @@ export function rotateMatrix(matrix: Matrix, reverse = false): Matrix {
 /**
  * Checks if child is not outside parent matrix
  */
-export function matrixContains(parent: Matrix, child: Matrix, position: IPoint): boolean {
-    for (let i = 0; i < child.length; i++) {
-        const col = child[i];
+export function matrixContains(parent: Matrix, child: IPositionedMatrix): boolean {
+    const { matrix: childMatrix, position } = child;
+
+    for (let i = 0; i < childMatrix.length; i++) {
+        const col = childMatrix[i];
         for (let j = 0; j < col.length; j++) {
             if (!col[j]) continue;
 
@@ -107,7 +105,9 @@ export function matrixContains(parent: Matrix, child: Matrix, position: IPoint):
     return true;
 }
 
-export function matrixesColliding(m1: Matrix, m2: Matrix, position: IPoint): boolean {
+export function matrixesColliding(m1: Matrix, pm2: IPositionedMatrix): boolean {
+    const { matrix: m2, position } = pm2;
+
     for (let x = 0; x < m2.length; x++) {
         for (let y = 0; y < m2[0].length; y++) {
             if (!m2[x][y]) continue;
@@ -116,5 +116,6 @@ export function matrixesColliding(m1: Matrix, m2: Matrix, position: IPoint): boo
             }
         }
     }
+
     return false;
 }

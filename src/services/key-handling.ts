@@ -20,7 +20,10 @@ const handleKeys = () => document.addEventListener('keydown', e => {
             player.shape.rotate();
 
             // Push shape back on to the board
-            if (!board.contains(player.shape.blocks, newPosition)) {
+            if (!board.contains({
+                matrix: player.shape.blocks, position:
+                newPosition
+            })) {
                 newPosition = player.getContainedPosition(board);
             }
 
@@ -53,7 +56,10 @@ const handleKeys = () => document.addEventListener('keydown', e => {
             do {
                 nextPos = { x: nextPos.x, y: nextPos.y + 1 };
                 hdPoints += settings.points.hardDrop;
-            } while (!board.collides(player.shape.blocks, nextPos));
+            } while (!board.collides({
+                matrix: player.shape.blocks,
+                position: nextPos
+            }));
 
             newPosition = { x: nextPos.x, y: nextPos.y - 1 };
             addScore(Math.min(
@@ -69,7 +75,10 @@ const handleKeys = () => document.addEventListener('keydown', e => {
     const posChanged = !pointEquals(player.position, newPosition);
 
     if (posChanged) {
-        if (!board.collides(player.shape.blocks, newPosition)) {
+        if (!board.collides({
+            matrix: player.shape.blocks,
+            position: newPosition
+        })) {
             player.position = newPosition;
         } else activateLoop();
     }

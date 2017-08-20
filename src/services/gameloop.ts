@@ -10,7 +10,7 @@ function update(): void {
         y: player.position.y + 1
     };
 
-    if (!board.collides(player.shape.blocks, newPos)) {
+    if (!board.collides({ matrix: player.shape.blocks, position: newPos })) {
         player.position = newPos;
     } else {
         // Colliding
@@ -28,7 +28,10 @@ function update(): void {
         player.softDropPoints = 0;
 
         // Detect immediate collision
-        if (board.collides(player.shape.blocks, player.position)) {
+        if (board.collides({
+            matrix: player.shape.blocks,
+            position: player.position
+        })) {
             gameOver();
         }
     }

@@ -1,7 +1,8 @@
 import Matrix from '../interfaces/matrix';
 import IPoint from '../interfaces/point';
+import IPositionedMatrix from '../interfaces/positioned-matrix';
 import { ISize } from '../interfaces/size';
-import { addMatrix, matrixContains, matrixesColliding } from '../services/matrix-calculations';
+import { matrixContains, matrixesColliding, mergeMatrixes } from '../services/matrix-calculations';
 import Shape from './shape';
 
 export default class Board {
@@ -16,7 +17,10 @@ export default class Board {
     }
 
     public place(shape: Shape, position: IPoint): void {
-        addMatrix(this.blocks, shape.blocks, position);
+        mergeMatrixes(this.blocks, {
+            matrix: shape.blocks,
+            position
+        }, this.blocks);
     }
 
     public clearFullLines(): number {
@@ -31,9 +35,8 @@ export default class Board {
 
         rows:
         for (let y = 0; y < rowCount; y++) {
-            // tslint:disable-next-line:prefer-for-of
-            for (let x = 0; x < this._blocks.length; x++) {
-                if (!this._blocks[x][y]) {
+            for (const col in this._blocks) {
+                if (!col[y]) {
                     incompleteRows[y] = true;
                     continue rows;
                 }
@@ -61,12 +64,12 @@ export default class Board {
         }
     }
 
-    public contains(matrix: Matrix, position: IPoint): boolean {
-        return matrixContains(this._blocks, matrix, position);
+    public contains(matrix: IPositionedMatrix): boolean {
+        return matrixContains(this._blocks, matrix);
     }
 
-    public collides(matrix: Matrix, position: IPoint): boolean {
-        return !this.contains(matrix, position)
-            || matrixesColliding(this.blocks, matrix, position);
+    public collides(matrix: IPositionedMatrix): boolean {
+        return !this.contains(matrix)
+            || matrixesColliding(this.blocks, matrix);
     }
 }
