@@ -1,8 +1,8 @@
 import settings from '../settings';
 import gameOver from './game-over';
-import { mergeMatrixes } from './matrix-calculations';
 import { addScore } from './player-score';
 import { board, panel, player } from './storage';
+import getViewMatrix from './view-matrix';
 
 function update(): void {
     const newPos = {
@@ -36,8 +36,7 @@ function update(): void {
         }
     }
 
-    const viewMatrix = mergeMatrixes(board.blocks, player.shape.blocks, player.position);
-    panel.draw(viewMatrix);
+    panel.draw(getViewMatrix());
 }
 
 // Call update immediately

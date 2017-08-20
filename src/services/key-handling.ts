@@ -1,9 +1,9 @@
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
 import { activateLoop } from './gameloop';
-import { mergeMatrixes } from './matrix-calculations';
 import { addScore } from './player-score';
 import { board, panel, player } from './storage';
+import getViewMatrix from './view-matrix';
 
 const handleKeys = () => document.addEventListener('keydown', e => {
 
@@ -85,8 +85,7 @@ const handleKeys = () => document.addEventListener('keydown', e => {
 
     if (triggered) {
         e.preventDefault();
-        const viewMatrix = mergeMatrixes(board.blocks, player.shape.blocks, player.position);
-        panel.draw(viewMatrix);
+        panel.draw(getViewMatrix());
     }
 });
 
