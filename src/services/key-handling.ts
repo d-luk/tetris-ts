@@ -75,12 +75,16 @@ const handleKeys = () => document.addEventListener('keydown', e => {
     const posChanged = !pointEquals(player.position, newPosition);
 
     if (posChanged) {
-        if (!board.collides({
+        const newMatrix = {
             matrix: player.shape.blocks,
             position: newPosition
-        })) {
+        };
+
+        if (!board.collides(newMatrix)) {
             player.position = newPosition;
-        } else activateLoop();
+        } else if (board.contains(newMatrix)) {
+            activateLoop();
+        }
     }
 
     if (triggered) {
