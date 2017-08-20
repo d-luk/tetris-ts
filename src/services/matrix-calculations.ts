@@ -25,22 +25,22 @@ export function getMatrixSize(matrix: Matrix): ISize {
 }
 
 /**
- * Merges m1 and pm2 into a new matrix with the size of m1
+ * Merges parent and child matrixes into the target matrix
  */
-export function mergeMatrixes(m1: Matrix, pm2: IPositionedMatrix, target = copyMatrix(m1)): Matrix {
-    const { matrix: m2, position } = pm2;
+export function mergeMatrixes(parent: Matrix, child: IPositionedMatrix, target = copyMatrix(parent)): Matrix {
+    const { matrix: childMatrix, position } = child;
     const result = target;
 
-    for (let i = 0; i < m2.length; i++) {
-        for (let j = 0; j < m2[0].length; j++) {
-            const value = m2[i][j];
+    for (let i = 0; i < childMatrix.length; i++) {
+        for (let j = 0; j < childMatrix[0].length; j++) {
+            const value = childMatrix[i][j];
             if (typeof value === 'undefined') continue;
 
             const x = i + position.x;
             const y = j + position.y;
 
-            if (x >= 0 && x < m1.length &&
-                y >= 0 && y < m1[0].length &&
+            if (x >= 0 && x < parent.length &&
+                y >= 0 && y < parent[0].length &&
                 (value || !result[x][y])) {
                 result[x][y] = value;
             }
@@ -105,13 +105,13 @@ export function matrixContains(parent: Matrix, child: IPositionedMatrix): boolea
     return true;
 }
 
-export function matrixesColliding(m1: Matrix, pm2: IPositionedMatrix): boolean {
-    const { matrix: m2, position } = pm2;
+export function matrixesColliding(parent: Matrix, child: IPositionedMatrix): boolean {
+    const { matrix: childMatrix, position } = child;
 
-    for (let x = 0; x < m2.length; x++) {
-        for (let y = 0; y < m2[0].length; y++) {
-            if (!m2[x][y]) continue;
-            if (m1[x + position.x][y + position.y]) {
+    for (let x = 0; x < childMatrix.length; x++) {
+        for (let y = 0; y < childMatrix[0].length; y++) {
+            if (!childMatrix[x][y]) continue;
+            if (parent[x + position.x][y + position.y]) {
                 return true;
             }
         }
