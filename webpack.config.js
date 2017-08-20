@@ -3,7 +3,7 @@ const pj = path.join;
 const fs = require('fs');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const webpack = require('webpack');
+const { ModuleConcatenationPlugin, UglifyJsPlugin } = require('webpack').optimize;
 
 module.exports = {
     entry: path.resolve('src', 'index.ts'),
@@ -24,8 +24,12 @@ module.exports = {
     target: 'web',
     plugins: [
         new CheckerPlugin(),
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
+        new ModuleConcatenationPlugin(),
+        new UglifyJsPlugin({
+            sourceMap: true, uglifyOptions: {
+                compress: { passes: 2 }
+            }
+        }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
     devtool: 'source-map',
