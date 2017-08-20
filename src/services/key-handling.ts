@@ -1,3 +1,4 @@
+import { matrixesColliding } from './matrix-calculations';
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
 import { activateLoop } from './gameloop';
@@ -13,6 +14,8 @@ const handleKeys = () => document.addEventListener('keydown', e => {
     };
 
     let triggered = true;
+    let hardDropped = false;
+
     switch (e.code) {
         case 'ArrowUp':
             // Rotate clockwise
@@ -66,6 +69,7 @@ const handleKeys = () => document.addEventListener('keydown', e => {
                 hdPoints - settings.points.hardDrop,
                 settings.points.hardDropMax));
 
+            hardDropped = true;
             break;
         default:
             triggered = false;
@@ -82,7 +86,9 @@ const handleKeys = () => document.addEventListener('keydown', e => {
 
         if (!board.collides(newMatrix)) {
             player.position = newPosition;
-        } else if (board.contains(newMatrix)) {
+        }
+
+        if (matrixesColliding(board.blocks, newMatrix) || hardDropped) {
             activateLoop();
         }
     }

@@ -111,7 +111,11 @@ export function matrixesColliding(parent: Matrix, child: IPositionedMatrix): boo
     for (let x = 0; x < childMatrix.length; x++) {
         for (let y = 0; y < childMatrix[0].length; y++) {
             if (!childMatrix[x][y]) continue;
-            if (parent[x + position.x][y + position.y]) {
+
+            const col = parent[x + position.x];
+            if (!col) continue;
+
+            if (col[y + position.y]) {
                 return true;
             }
         }
