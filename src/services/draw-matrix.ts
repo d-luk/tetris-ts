@@ -4,6 +4,8 @@ import { ISize } from '../interfaces/size';
 import { Color } from '../models/color';
 import settings from '../settings';
 
+const emptyColor = '#8ed6ff';
+
 export default function drawMatrix(panel: Panel, matrix: Matrix): void {
     const ctx = panel.ctx;
 
@@ -16,9 +18,12 @@ export default function drawMatrix(panel: Panel, matrix: Matrix): void {
         if (typeof item === 'undefined' ||
             !settings.drawEmptyTiles && !item) return;
 
-        ctx.fillStyle = item ? getColorCode(item) : '#8ED6FF';
-        ctx.fillRect(x * tileSize.width, y * tileSize.height,
-            tileSize.width, tileSize.height);
+        ctx.fillStyle = item ? getColorCode(item) : emptyColor;
+        ctx.fillRect(
+            x * tileSize.width | 0,
+            y * tileSize.height | 0,
+            Math.ceil(tileSize.width),
+            Math.ceil(tileSize.height));
     }));
 }
 
