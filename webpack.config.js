@@ -26,9 +26,8 @@ module.exports = {
         new CheckerPlugin(),
         new ModuleConcatenationPlugin(),
         new UglifyJsPlugin({
-            sourceMap: true, uglifyOptions: {
-                compress: { passes: 2 }
-            }
+            sourceMap: true,
+            compress: { passes: 3 }
         }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
