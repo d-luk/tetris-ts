@@ -35,7 +35,7 @@ export default class Board {
 
         rows:
         for (let y = 0; y < rowCount; y++) {
-            for (const col in this._blocks) {
+            for (const col of this._blocks) {
                 if (!col[y]) {
                     incompleteRows[y] = true;
                     continue rows;
