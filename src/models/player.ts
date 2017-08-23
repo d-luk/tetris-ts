@@ -1,5 +1,6 @@
 import IPoint, { clonePoint } from '../interfaces/point';
 import { findAny, findIndex } from '../services/arrays';
+import { resetControls } from '../services/key-handling';
 import getRandomShape from '../services/random-shape';
 import Board from './board';
 import Shape from './shape';
@@ -23,6 +24,7 @@ export default class Player {
     public reset(): void {
         this.position = clonePoint(this._startingPos);
         this._shape = getRandomShape();
+        resetControls();
     }
 
     /**
