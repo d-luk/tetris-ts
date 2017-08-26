@@ -23,7 +23,7 @@ const settings = {
 
     debug: {
         // Draw full shape square
-        drawEmptyTiles: true,
+        drawEmptyTiles: false,
         emptyTileColor: '#f1f1f1'
     }
 };
