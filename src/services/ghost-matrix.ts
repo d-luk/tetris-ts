@@ -23,7 +23,6 @@ export default function createGhost(board: Board, pm: IPositionedMatrix): IPosit
     // Copy matrix with new color
     const ghost: Matrix = matrix.map(col => col.map(x => {
         if (x) return ghostColor;
-        return x;
     }));
 
     return { matrix: ghost, position };

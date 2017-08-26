@@ -21,8 +21,11 @@ const settings = {
         hardDropMax: 40
     },
 
-    // Draw full shape square (debug)
-    drawEmptyTiles: false
+    debug: {
+        // Draw full shape square
+        drawEmptyTiles: true,
+        emptyTileColor: '#f1f1f1'
+    }
 };
 
 export default settings;

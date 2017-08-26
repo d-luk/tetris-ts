@@ -4,7 +4,7 @@ import { ISize } from '../interfaces/size';
 import { getColorCode } from '../models/color';
 import settings from '../settings';
 
-const emptyColor = '#8ed6ff';
+const emptyColor = settings.debug.emptyTileColor;
 
 export default function drawMatrix(panel: Panel, matrix: Matrix): void {
     const ctx = panel.ctx;
@@ -16,7 +16,7 @@ export default function drawMatrix(panel: Panel, matrix: Matrix): void {
 
     matrix.forEach((col, x) => col.forEach((item, y) => {
         if (typeof item === 'undefined' ||
-            !settings.drawEmptyTiles && !item) return;
+            !settings.debug.drawEmptyTiles && !item) return;
 
         ctx.fillStyle = item ? getColorCode(item) : emptyColor;
         ctx.fillRect(
