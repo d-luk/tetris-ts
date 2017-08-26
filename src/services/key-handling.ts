@@ -1,7 +1,7 @@
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
 import { activateLoop } from './gameloop';
-import { matrixesColliding } from './matrix-calculations';
+import { getUnstuckPosition, matrixesColliding } from './matrix-calculations';
 import { addScore } from './player-score';
 import { board, panel, player } from './storage';
 import Timer from './timer';
@@ -75,22 +75,17 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
                 position: newPosition
             };
 
-            if (!board.contains(playerMatrix)) {
-                // Not on the board anymore, try to reposition
-                const containedPos = player.getContainedPosition(board.blocks.length);
+            if (board.collides(playerMatrix)) {
+                // Colliding with other blocks, try to reposition
+                const unstuckPos = getUnstuckPosition(playerMatrix, board.collides.bind(board));
 
-                if (board.collides({
-                    matrix: player.shape.blocks,
-                    position: containedPos
-                })) {
-                    // Colliding with other blocks, abort!
+                if (!unstuckPos) {
+                    // Cannot unstuck, revert!
                     player.shape.rotate(true);
                 } else {
-                    // All worked out
-                    newPosition = containedPos;
+                    // Repositioned
+                    newPosition = unstuckPos;
                 }
-            } else if (board.collides(playerMatrix)) {
-                player.shape.rotate(true);
             }
 
             break;

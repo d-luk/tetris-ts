@@ -1,4 +1,5 @@
 import Matrix from '../interfaces/matrix';
+import { clonePoint, default as IPoint } from '../interfaces/point';
 import IPositionedMatrix from '../interfaces/positioned-matrix';
 import { ISize } from '../interfaces/size';
 
@@ -122,4 +123,50 @@ export function matrixesColliding(parent: Matrix, child: IPositionedMatrix): boo
     }
 
     return false;
+}
+
+/**
+ * Tries to move matrix to a non-colliding position
+ */
+export function getUnstuckPosition(matrix: IPositionedMatrix,
+    isColliding: (matrix: IPositionedMatrix) => boolean): IPoint | null {
+
+    const { matrix: shape, position } = matrix;
+
+    const maxOffset = Math.ceil(shape.length / 2);
+    for (let i = 1; i <= maxOffset; i++) {
+        const pos = clonePoint(position);
+
+        // Try down
+        pos.y += i;
+        if (!isColliding({
+            matrix: shape,
+            position: pos
+        })) return pos;
+
+        // Try up
+        pos.y -= i * 2;
+        if (!isColliding({
+            matrix: shape,
+            position: pos
+        })) return pos;
+        pos.y += i;
+
+        // Try right
+        pos.x += i;
+        if (!isColliding({
+            matrix: shape,
+            position: pos
+        })) return pos;
+
+        // Try left
+        pos.x -= i * 2;
+        if (!isColliding({
+            matrix: shape,
+            position: pos
+        })) return pos;
+        pos.x += i;
+    }
+
+    return null;
 }
