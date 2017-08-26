@@ -70,12 +70,27 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
             if (repeated) return true;
             player.shape.rotate();
 
-            // Push shape back on to the board
-            if (!board.contains({
-                matrix: player.shape.blocks, position:
-                newPosition
-            })) {
-                newPosition = player.getContainedPosition(board);
+            const playerMatrix = {
+                matrix: player.shape.blocks,
+                position: newPosition
+            };
+
+            if (!board.contains(playerMatrix)) {
+                // Not on the board anymore, try to reposition
+                const containedPos = player.getContainedPosition(board.blocks.length);
+
+                if (board.collides({
+                    matrix: player.shape.blocks,
+                    position: containedPos
+                })) {
+                    // Colliding with other blocks, abort!
+                    player.shape.rotate(true);
+                } else {
+                    // All worked out
+                    newPosition = containedPos;
+                }
+            } else if (board.collides(playerMatrix)) {
+                player.shape.rotate(true);
             }
 
             break;

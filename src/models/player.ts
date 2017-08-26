@@ -2,7 +2,6 @@ import IPoint, { clonePoint } from '../interfaces/point';
 import { findAny, findIndex } from '../services/arrays';
 import { resetControls } from '../services/key-handling';
 import getRandomShape from '../services/random-shape';
-import Board from './board';
 import Shape from './shape';
 
 export default class Player {
@@ -27,11 +26,13 @@ export default class Player {
         resetControls();
     }
 
+    // TODO: Remove logic below from model
+
     /**
      * Calculates a position for
      * the player to be fully on the board
      */
-    public getContainedPosition(board: Board): IPoint {
+    public getContainedPosition(maxX: number): IPoint {
         const position = clonePoint(this.position);
 
         // Find lowest x value
@@ -40,8 +41,9 @@ export default class Player {
             return findAny(col, value => !!value);
         }) as number) + position.x;
 
-        // Push shape to the right
+        // Colliding with left boundry
         if (xLow < 0) {
+            // Push shape to the right
             position.x += 0 - xLow;
             return position;
         }
@@ -53,9 +55,10 @@ export default class Player {
                 return findAny(col, value => !!value);
             }) as number) + position.x;
 
-        // Push shape to the left
-        if (xHigh > board.blocks.length) {
-            position.x -= xHigh - board.blocks.length;
+        // Colliding with right boundry
+        if (xHigh > maxX) {
+            // Push shape to the left
+            position.x -= xHigh - maxX;
             return position;
         }
 
