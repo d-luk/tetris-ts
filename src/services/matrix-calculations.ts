@@ -2,6 +2,7 @@ import Matrix from '../interfaces/matrix';
 import { clonePoint, default as IPoint } from '../interfaces/point';
 import IPositionedMatrix from '../interfaces/positioned-matrix';
 import { ISize } from '../interfaces/size';
+import { findAny } from './arrays';
 
 export function createMatrix(size: ISize): Matrix {
     const result: Matrix = [];
@@ -23,6 +24,19 @@ export function getMatrixSize(matrix: Matrix): ISize {
         width: matrix.length,
         height: matrix[0].length
     };
+}
+
+export function matrixEquals(m1: Matrix, m2: Matrix): boolean {
+    if (m1.length !== m2.length
+        || m1[0].length !== m2[0].length) {
+        return false;
+    }
+
+    return !findAny(m1, (col, x) => {
+        return findAny(col, (value, y) => {
+            return value !== m2[x][y];
+        });
+    });
 }
 
 /**

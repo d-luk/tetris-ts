@@ -23,5 +23,6 @@ export default class Player {
         this.position = clonePoint(this._startingPos);
         this._shape = getRandomShape();
         resetControls();
+        this.softDropPoints = 0;
     }
 }

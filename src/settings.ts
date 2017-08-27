@@ -21,6 +21,9 @@ const settings = {
         hardDropMax: 40
     },
 
+    // Seconds to wait before locking piece
+    placementTimeout: 0.5,
+
     debug: {
         // Draw full shape square
         drawEmptyTiles: false,

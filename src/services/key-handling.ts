@@ -1,7 +1,7 @@
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
-import { activateLoop } from './gameloop';
-import { getUnstuckPosition, matrixesColliding } from './matrix-calculations';
+import { placePiece, stopLockTimeout } from './gameloop';
+import { copyMatrix, getUnstuckPosition, matrixEquals } from './matrix-calculations';
 import { addScore } from './player-score';
 import { board, panel, player } from './storage';
 import Timer from './timer';
@@ -60,6 +60,8 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
         x: player.position.x,
         y: player.position.y
     };
+
+    const beforeMatrix = copyMatrix(player.shape.blocks);
 
     let triggered = true;
     let hardDropped = false;
@@ -136,9 +138,9 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
             break;
     }
 
-    const posChanged = !pointEquals(player.position, newPosition);
+    let posChanged = !pointEquals(player.position, newPosition);
 
-    if (posChanged) {
+    if (posChanged || hardDropped) {
         const newMatrix = {
             matrix: player.shape.blocks,
             position: newPosition
@@ -146,14 +148,19 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
 
         if (!board.collides(newMatrix)) {
             player.position = newPosition;
-        }
+        } else posChanged = false;
 
-        if (matrixesColliding(board.blocks, newMatrix) || hardDropped) {
-            activateLoop();
+        if (hardDropped
+            || keyCode === 'ArrowDown'
+            && board.collides(newMatrix)) {
+            placePiece();
         }
     }
 
-    if (triggered) {
+    const rotationChanged = !matrixEquals(player.shape.blocks, beforeMatrix);
+
+    if (posChanged || rotationChanged) {
+        stopLockTimeout();
         panel.draw(getViewMatrix());
     }
 
