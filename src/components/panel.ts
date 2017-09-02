@@ -8,6 +8,7 @@ export default class Panel {
     public readonly ctx: CanvasRenderingContext2D;
     public readonly size: ISize;
     public readonly pixelRatio: number;
+    public readonly canvas: HTMLCanvasElement;
 
     constructor(id: string) {
         const canvas = document.getElementById(id) as HTMLCanvasElement;
@@ -32,6 +33,7 @@ export default class Panel {
         const ctx = canvas.getContext('2d');
         if (!ctx) throw new Error('Context not found!');
         this.ctx = ctx;
+        this.canvas = canvas;
     }
 
     public draw(matrix: Matrix): void {

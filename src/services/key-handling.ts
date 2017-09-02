@@ -1,5 +1,7 @@
+import * as Hammer from 'hammerjs';
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
+import { findAny, findIndex } from './arrays';
 import { placePiece, stopLockTimeout } from './gameloop';
 import { copyMatrix, getUnstuckPosition, matrixEquals } from './matrix-calculations';
 import { addScore } from './player-score';
@@ -20,7 +22,7 @@ const keyThresholdTimer = new Timer(() => {
     keyInterval.start();
 }, 200, false);
 
-export default function handleKeys(): void {
+export default function handleInput(): void {
     document.addEventListener('keydown', e => {
         if (e.repeat) return;
 
@@ -49,6 +51,54 @@ export default function handleKeys(): void {
             }
         }
     });
+
+    const mc = new Hammer.Manager(document.body);
+    mc.add(new Hammer.Tap());
+    mc.add(new Hammer.Swipe({ direction: Hammer.DIRECTION_DOWN }));
+    mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 20 }));
+    mc.on('tap', () => handleKeyDown('ArrowUp', false));
+    mc.on('panleft', e => movePiece(e.center.x));
+    mc.on('panright', e => movePiece(e.center.x));
+    mc.on('swipedown', () => handleKeyDown('Space', false));
+}
+
+function movePiece(touchX: number): void {
+    const canvasWidth = panel.canvas.offsetWidth;
+    const borderLeft = panel.canvas.offsetLeft;
+    const borderRight = borderLeft + canvasWidth;
+
+    if (touchX < borderLeft
+        || touchX > borderRight) {
+        // Outside canvas
+        return;
+    }
+
+    const tileSize = canvasWidth / board.size.width;
+    const touchingCol = (touchX - borderLeft) / tileSize;
+    const shapeWidth = player.shape.blocks.reduce((width, col) => {
+        if (findAny(col, x => !!x)) width++;
+        return width;
+    }, 0);
+
+    const shapeCenterX = ((findIndex(
+        player.shape.blocks,
+        col => findAny(col, x => !!x)) || 0)
+        + shapeWidth) / 2;
+
+    const newCol = Math.floor(touchingCol - shapeCenterX);
+    const currentCol = player.position.x;
+    if (newCol === currentCol) return;
+
+    const deltaCol = currentCol - newCol;
+    if (deltaCol > 0) {
+        for (let i = 0; i < deltaCol; i++) {
+            handleKeyDown('ArrowLeft', false);
+        }
+    } else {
+        for (let i = 0; i > deltaCol; i--) {
+            handleKeyDown('ArrowRight', false);
+        }
+    }
 }
 
 export function resetControls(): void {
@@ -89,7 +139,6 @@ function handleKeyDown(keyCode: string, repeated: boolean): boolean {
                     newPosition = unstuckPos;
                 }
             }
-
             break;
         case 'ArrowRight':
             // Move right
