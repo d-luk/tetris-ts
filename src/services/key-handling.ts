@@ -52,44 +52,41 @@ export default function handleInput(): void {
         }
     });
 
+    // Touch controls
+    if (!Modernizr.touchevents) return;
     const mc = new Hammer.Manager(document.body);
     mc.add(new Hammer.Tap());
     mc.add(new Hammer.Swipe({ direction: Hammer.DIRECTION_DOWN }));
     mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 20 }));
     mc.on('tap', () => handleKeyDown('ArrowUp', false));
-    mc.on('panleft', e => movePiece(e.center.x));
-    mc.on('panright', e => movePiece(e.center.x));
     mc.on('swipedown', () => handleKeyDown('Space', false));
+
+    let isFirst = true;
+    mc.on('panstart', () => isFirst = true);
+    mc.on('panleft', e => {
+        movePiece(e.deltaX, isFirst);
+        if (isFirst) isFirst = false;
+    });
+    mc.on('panright', e => {
+        movePiece(e.deltaX, isFirst);
+        if (isFirst) isFirst = false;
+    });
 }
 
-function movePiece(touchX: number): void {
-    const canvasWidth = panel.canvas.offsetWidth;
-    const borderLeft = panel.canvas.offsetLeft;
-    const borderRight = borderLeft + canvasWidth;
+let colStart: number;
+function movePiece(deltaX: number, reset: boolean): void {
 
-    if (touchX < borderLeft
-        || touchX > borderRight) {
-        // Outside canvas
-        return;
+    const canvasWidth = panel.canvas.offsetWidth;
+    const tileWidth = canvasWidth / board.size.width;
+
+    if (reset || typeof colStart === 'undefined') {
+        colStart = player.position.x - deltaX / tileWidth;
     }
 
-    const tileSize = canvasWidth / board.size.width;
-    const touchingCol = (touchX - borderLeft) / tileSize;
-    const shapeWidth = player.shape.blocks.reduce((width, col) => {
-        if (findAny(col, x => !!x)) width++;
-        return width;
-    }, 0);
+    const newCol = Math.floor(colStart + deltaX / tileWidth);
+    if (newCol === colStart) return;
 
-    const shapeCenterX = ((findIndex(
-        player.shape.blocks,
-        col => findAny(col, x => !!x)) || 0)
-        + shapeWidth) / 2;
-
-    const newCol = Math.floor(touchingCol - shapeCenterX);
-    const currentCol = player.position.x;
-    if (newCol === currentCol) return;
-
-    const deltaCol = currentCol - newCol;
+    const deltaCol = player.position.x - newCol;
     if (deltaCol > 0) {
         for (let i = 0; i < deltaCol; i++) {
             handleKeyDown('ArrowLeft', false);
