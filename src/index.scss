@@ -46,7 +46,7 @@ h1 {
   }
 
   #game {
-    height: 92vh;
+    height: calc(92vh - 69px);
     display: block;
     margin: auto;
   }
