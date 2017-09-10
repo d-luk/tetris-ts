@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "node"
+  - "lts/*"
+branches:
+  only: master
+cache: yarn
+before_script:
+  - yarn global add gulp-cli
+script: 
+  - yarn run build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  local_dir: 'dist'
+  on:
+    branch: master

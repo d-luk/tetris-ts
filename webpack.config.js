@@ -5,11 +5,20 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { ModuleConcatenationPlugin, UglifyJsPlugin } = require('webpack').optimize;
 
-module.exports = {
-    entry: path.resolve('src', 'index.ts'),
+const env = (process.env.NODE_ENV || 'production').trim();
+const isProd = env === 'production';
+
+console.log('Webpack env:', env);
+
+const config = {
+    entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js'
+    },
+    target: 'web',
+    resolve: {
+        extensions: ['.ts']
     },
     module: {
         rules: [{
@@ -21,21 +30,25 @@ module.exports = {
             use: ['awesome-typescript-loader']
         }]
     },
-    target: 'web',
     plugins: [
         new CheckerPlugin(),
-        new ModuleConcatenationPlugin(),
         new UglifyJsPlugin({
             sourceMap: true,
-            compress: { passes: 3 }
+            compress: { passes: 3 },
+            mangle: isProd ? {
+                properties: true
+            } : false,
+            beautify: !isProd,
+            comments: false,
+            parallel: true
         }),
         new CircularDependencyPlugin({ failOnError: true })
     ],
-    devtool: 'source-map',
-    devServer: {
-        contentBase: 'dist/'
-    },
-    resolve: {
-        extensions: ['.ts']
-    }
+    devtool: isProd ? 'source-map' : 'inline-source-map'
 };
+
+if (isProd) {
+    config.plugins.push(new ModuleConcatenationPlugin());
+}
+
+module.exports = config;

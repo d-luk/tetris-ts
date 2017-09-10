@@ -97,10 +97,6 @@ function movePiece(deltaX: number, reset: boolean): void {
     }
 }
 
-export function resetControls(): void {
-    keysDown.remove('ArrowDown');
-}
-
 function handleKeyDown(keyCode: string, repeated: boolean): boolean {
     let newPosition = {
         x: player.position.x,

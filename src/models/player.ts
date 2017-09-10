@@ -1,5 +1,4 @@
 import IPoint, { clonePoint } from '../interfaces/point';
-import { resetControls } from '../services/key-handling';
 import getRandomShape from '../services/random-shape';
 import Shape from './shape';
 
@@ -22,7 +21,6 @@ export default class Player {
     public reset(): void {
         this.position = clonePoint(this._startingPos);
         this._shape = getRandomShape();
-        resetControls();
         this.softDropPoints = 0;
     }
 }

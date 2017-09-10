@@ -70,3 +70,4 @@ typings/
 !.vscode/extensions.json
 
 to-do.txt
+dist/
