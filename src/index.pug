@@ -1,26 +1,27 @@
 doctype html
 
-head
-    meta(charset='utf-8')
-    meta(http-equiv='x-ua-compatible', content='ie=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-    link(rel='author', content='Duncan Luk')
-    title='Tetris'
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='x-ua-compatible', content='ie=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+        link(rel='author', content='Duncan Luk')
+        title='Tetris'
 
-    link(href='index.css', rel='stylesheet')
+        link(href='style.css', rel='stylesheet')
 
-body
-    #content
-        h1 Tetris
-        #player-score-container
-            span#current-score
-                ='Score: '
-                span#player-score 0
+    body
+        #content
+            h1 Tetris
+            #player-score-container
+                span#current-score
+                    ='Score: '
+                    span#player-score 0
 
-            span#highscore
-                ='Highest: '
-                span#player-highscore 0
+                span#highscore
+                    ='Highest: '
+                    span#player-highscore 0
 
-        canvas#game(width='300', height='600')
-    
-    script(src='index.js', defer)
+            canvas#game(width='300', height='600')
+        
+        script(src='script.js', defer)
