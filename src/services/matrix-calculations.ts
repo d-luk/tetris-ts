@@ -69,7 +69,7 @@ export function mergeMatrixes(parent: Matrix, child: IPositionedMatrix, target =
  * Transforms matrix to be used in the coordinate system
  */
 export function xyMatrix(matrix: Matrix): Matrix {
-    return rotateMatrix(matrix)
+    return rotateMatrix(matrix, true)
         .reduce<Matrix>((result, col, x) => {
             // Flip columns
             result[x] = col.reverse();

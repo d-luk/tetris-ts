@@ -7,9 +7,9 @@ const c = Color.Orange;
 export default class L extends Shape {
     constructor() {
         super(xyMatrix([
-            [0, c, 0],
-            [0, c, 0],
-            [0, c, c]
+            [0, 0, c],
+            [c, c, c],
+            [0, 0, 0]
         ]));
     }
 }

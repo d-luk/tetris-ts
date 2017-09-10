@@ -7,9 +7,9 @@ const c = Color.Pink;
 export default class J extends Shape {
     constructor() {
         super(xyMatrix([
-            [0, c, 0],
-            [0, c, 0],
-            [c, c, 0]
+            [c, 0, 0],
+            [c, c, c],
+            [0, 0, 0]
         ]));
     }
 }

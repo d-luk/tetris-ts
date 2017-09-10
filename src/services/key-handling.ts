@@ -1,7 +1,6 @@
 import * as Hammer from 'hammerjs';
 import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
-import { findAny, findIndex } from './arrays';
 import { placePiece, stopLockTimeout } from './gameloop';
 import { copyMatrix, getUnstuckPosition, matrixEquals } from './matrix-calculations';
 import { addScore } from './player-score';
