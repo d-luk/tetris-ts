@@ -11,10 +11,11 @@ const isProd = env === 'production';
 console.log('Webpack env:', env);
 
 const config = {
-    entry: './src/index.ts',
+    entry: './src/script.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'index.js'
+        filename: 'script.js',
+        devtoolModuleFilenameTemplate: './scripts/[resource-path]'
     },
     target: 'web',
     resolve: {
