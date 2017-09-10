@@ -1,7 +1,12 @@
+import { getHighScore, setHighScore } from './player-highscore';
+
 let currentScore = 0;
 
 export function addScore(points: number): void {
     currentScore += points;
+    if (currentScore > getHighScore()) {
+        setHighScore(currentScore);
+    }
     triggerScoreChange();
 }
 
