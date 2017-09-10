@@ -48,7 +48,7 @@ gulp.task('css', () => {
             sourceRoot: '/styles'
         }))
         .pipe(gulp.dest('dist'))
-        .pipe(gulpif(isProd, browserSync.stream()));
+        .pipe(gulpif(!isProd, browserSync.stream()));
 });
 
 gulp.task('html', () => {
