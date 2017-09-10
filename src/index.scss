@@ -33,21 +33,49 @@ h1 {
   text-shadow: 0 1px 10px #3c3c3c;
 }
 
-@media screen and (max-device-width: 425px) {
+#current-score::after {
+  content: " | ";
+}
+
+html.touch {
   h1 {
     display: none;
   }
 
+  $score-height: 10vh;
+  $score-padding: 3vh;
+
   #player-score-container {
     margin-bottom: 0;
-    height: 8vh;
-    font-size: 4vh;
-    padding-top: 1vh;
+    height: $score-height;
+    padding-top: $score-padding / 3;
+    padding-bottom: $score-padding / 3;
+    line-height: 1;
+  }
+
+  #current-score {
+    display: block;
+    font-size: ($score-height - $score-padding) / 5 * 3;
+    margin-bottom: $score-padding / 3;
+
+    &::after {
+      content: "";
+    }
+  }
+
+  #highscore {
+    display: block;
+    font-size: ($score-height - $score-padding) / 5 * 2;
   }
 
   #game {
-    height: calc(92vh - 69px);
+    height: 100vh - $score-height;
     display: block;
     margin: auto;
+  }
+
+  &.ios-safari #game {
+    // The iOS safari menu is not calculated into the CSS vh
+    height: calc(#{100vh - $score-height} - 69px);
   }
 }
