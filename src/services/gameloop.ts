@@ -58,12 +58,22 @@ function update(): void {
 // Call update immediately
 let interval: number;
 let currentSeconds: number;
+
 export function setLoopSpeed(seconds: number): void {
     currentSeconds = seconds;
 
-    window.clearInterval(interval);
+    stopLoop();
     update();
     interval = window.setInterval(() => {
         if (!lockTimeout.running) update();
     }, seconds * 1000);
+}
+
+export function startLoop(): void {
+    setLoopSpeed(currentSeconds);
+}
+
+export function stopLoop(): void {
+    window.clearInterval(interval);
+
 }
