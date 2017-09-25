@@ -3,8 +3,9 @@ import { pointEquals } from '../interfaces/point';
 import settings from '../settings';
 import { placePiece, stopLockTimeout } from './gameloop';
 import { copyMatrix, getUnstuckPosition, matrixEquals } from './matrix-calculations';
+import { pauseGame, restartGame } from './pause-game';
 import { addScore } from './player-score';
-import { board, panel, player } from './storage';
+import { board, panel, paused, player } from './storage';
 import Timer from './timer';
 import UniqueArray from './unique-array';
 import getViewMatrix from './view-matrix';
@@ -13,7 +14,7 @@ const keysDown = new UniqueArray<string>();
 
 const keyInterval = new Timer(() => {
     keysDown.values.forEach(code => {
-        handleKeyDown(code, true);
+        handlePlayerMovement(code, true);
     });
 }, 90);
 
@@ -27,7 +28,7 @@ export default function handleInput(): void {
 
         const keyCode = e.code;
 
-        if (handleKeyDown(keyCode, false)) {
+        if (handlePlayerMovement(keyCode, false)) {
             e.preventDefault();
 
             keysDown.add(keyCode);
@@ -37,6 +38,15 @@ export default function handleInput(): void {
                 keyInterval.stop();
                 keyThresholdTimer.start();
             } else keyInterval.start();
+        }
+
+        // Pause game handling
+        if (paused.value) {
+            if (keyCode === 'Escape' || keyCode === 'Space') {
+                restartGame();
+            }
+        } else if (keyCode === 'Escape') {
+            pauseGame();
         }
     });
 
@@ -57,8 +67,8 @@ export default function handleInput(): void {
     mc.add(new Hammer.Tap());
     mc.add(new Hammer.Swipe({ direction: Hammer.DIRECTION_DOWN }));
     mc.add(new Hammer.Pan({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 20 }));
-    mc.on('tap', () => handleKeyDown('ArrowUp', false));
-    mc.on('swipedown', () => handleKeyDown('Space', false));
+    mc.on('tap', () => handlePlayerMovement('ArrowUp', false));
+    mc.on('swipedown', () => handlePlayerMovement('Space', false));
 
     let isFirst = true;
     mc.on('panstart', () => isFirst = true);
@@ -88,16 +98,18 @@ function movePiece(deltaX: number, reset: boolean): void {
     const deltaCol = player.position.x - newCol;
     if (deltaCol > 0) {
         for (let i = 0; i < deltaCol; i++) {
-            handleKeyDown('ArrowLeft', false);
+            handlePlayerMovement('ArrowLeft', false);
         }
     } else {
         for (let i = 0; i > deltaCol; i--) {
-            handleKeyDown('ArrowRight', false);
+            handlePlayerMovement('ArrowRight', false);
         }
     }
 }
 
-function handleKeyDown(keyCode: string, repeated: boolean): boolean {
+function handlePlayerMovement(keyCode: string, repeated: boolean): boolean {
+    if (paused.value) return false;
+
     let newPosition = {
         x: player.position.x,
         y: player.position.y

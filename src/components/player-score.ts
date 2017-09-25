@@ -7,6 +7,6 @@ export default function loadPlayerScore(): void {
 
     onScoreChange(score => {
         scoreEl.textContent = score.toLocaleString();
-        highScore.textContent = getHighScore().toString();
+        highScore.textContent = getHighScore().toLocaleString();
     }, true);
 }

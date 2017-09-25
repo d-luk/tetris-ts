@@ -1,0 +1,42 @@
+#pause-modal {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 300px;
+  text-align: center;
+  padding: 10px;
+
+   > div {
+    display: inline-block;
+    background-color: white;
+    padding: 20px 40px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.4);
+  }
+}
+
+#paused-heading {
+  color: #f44336;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+$btn-color: #ff7043;
+
+#continue-btn {
+  margin-top: 15px;
+  color: white;
+  background-color: $btn-color;
+  padding: 7px 14px;
+  border: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($btn-color, 5%);
+  }
+}
+
+html.touch #pause-modal {
+  top: 35%;
+}

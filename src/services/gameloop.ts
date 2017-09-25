@@ -1,5 +1,6 @@
 import settings from '../settings';
 import gameOver from './game-over';
+import { getUnstuckPosition } from './matrix-calculations';
 import { addScore } from './player-score';
 import { board, panel, player } from './storage';
 import Timer from './timer';
@@ -18,10 +19,17 @@ export function placePiece(): void {
     player.reset();
 
     // Detect immediate collision
-    if (board.collides({
+    const matrix = {
         matrix: player.shape.blocks,
         position: player.position
-    })) gameOver();
+    };
+
+    if (board.collides(matrix)) {
+        // Try to reposition
+        const unstuckPos = getUnstuckPosition(matrix, board.collides.bind(board));
+        if (unstuckPos) player.position = unstuckPos;
+        else gameOver();
+    }
 }
 
 const lockTimeout = new Timer(placePiece, settings.placementTimeout * 1000, false);
@@ -50,12 +58,22 @@ function update(): void {
 // Call update immediately
 let interval: number;
 let currentSeconds: number;
+
 export function setLoopSpeed(seconds: number): void {
     currentSeconds = seconds;
 
-    window.clearInterval(interval);
+    stopLoop();
     update();
     interval = window.setInterval(() => {
         if (!lockTimeout.running) update();
     }, seconds * 1000);
+}
+
+export function startLoop(): void {
+    setLoopSpeed(currentSeconds);
+}
+
+export function stopLoop(): void {
+    window.clearInterval(interval);
+
 }

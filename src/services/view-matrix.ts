@@ -12,8 +12,14 @@ export default function getViewMatrix(): Matrix {
 
     const ghost = createGhost(board, playerMatrix);
 
-    return mergeMatrixes(
+    const merged = mergeMatrixes(
         mergeMatrixes(board.blocks, ghost),
         playerMatrix
     );
+
+    // Strip top two rows
+    return merged.reduce((result: Matrix, col) => {
+        result.push(col.slice(2));
+        return result;
+    }, []);
 }
