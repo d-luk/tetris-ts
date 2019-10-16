@@ -1,5 +1,5 @@
-# TypeScript Tetris
+# Tetris in TypeScript
 
-[![Build Status](https://travis-ci.org/d-luk/tetris-ts.svg?branch=master)](https://travis-ci.org/d-luk/tetris-ts) [![dependencies Status](https://david-dm.org/d-luk/tetris-ts/status.svg)](https://david-dm.org/d-luk/tetris-ts)
+[![Build status](https://github.com/d-luk/tetris-ts/workflows/Build/badge.svg)](https://github.com/d-luk/tetris-ts/actions?workflow=Build) [![Dependencies status](https://david-dm.org/d-luk/tetris-ts/status.svg)](https://david-dm.org/d-luk/tetris-ts)
 
 Try it out: https://d-luk.github.io/tetris-ts/
