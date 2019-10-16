@@ -1,5 +1,5 @@
 export default class Timer {
-    private _handle: number | void;
+    private _handle: number|undefined;
     private readonly _handler: () => void;
     private readonly _interval: number;
     private readonly _repeat: boolean;
@@ -33,11 +33,11 @@ export default class Timer {
     }
 
     public stop(): void {
-        this._handle = (
+        (
             this._repeat
                 ? clearInterval
                 : clearTimeout
-        )(this._handle as number);
+        )(this._handle);
         this._running = false;
     }
 

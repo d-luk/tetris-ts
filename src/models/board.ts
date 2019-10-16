@@ -6,7 +6,8 @@ import { matrixContains, matrixesColliding, mergeMatrixes } from '../services/ma
 import Shape from './shape';
 
 export default class Board {
-    private _blocks: Matrix;
+    private _blocks!: Matrix;
+
     public get blocks() { return this._blocks; }
 
     public readonly size: ISize;
